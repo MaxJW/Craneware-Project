@@ -1,3 +1,6 @@
+# Current Screenshot
+![homepage screenshot](https://i.imgur.com/XoZnD6d.jpg)
+
 # TestApp
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 8.3.4.
