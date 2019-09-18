@@ -1,0 +1,13 @@
+<div class="search-border">
+    <form>
+        <mat-form-field class="full-width">
+            <input type="text" class="search-input" placeholder="Enter your condition" aria-label="Number" matInput [formControl]="myControl" [matAutocomplete]="auto">
+            <mat-autocomplete #auto="matAutocomplete">
+                <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
+                    {{option}}
+                </mat-option>
+            </mat-autocomplete>
+        </mat-form-field>
+        <button mat-button class="blue-button">Enter</button>
+    </form>
+</div>
