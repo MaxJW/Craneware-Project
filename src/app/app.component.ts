@@ -8,7 +8,7 @@ import { trigger, state, transition, animate, style } from '@angular/animations'
   animations: [
     trigger('slideIn', [
       transition(':enter', [
-        style({transform: 'translateY(150%)'}),
+        style({transform: 'translateY(100%)'}),
         animate('700ms ease-in', style({transform: 'translateY(0%)'}))
       ])
     ]),

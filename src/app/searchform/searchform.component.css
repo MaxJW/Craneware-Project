@@ -10,6 +10,10 @@ mat-form-field {
     flex: 1;
 }
 
+mat-error {
+    margin-bottom: 5px;
+}
+
 .blue-button {
     background-color: #4FC3F7;
     color: white;
