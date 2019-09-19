@@ -3,6 +3,8 @@ import {FormControl} from '@angular/forms';
 import {Observable} from 'rxjs';
 import {map, startWith} from 'rxjs/operators';
 
+import { HttpService } from '../http.service';
+
 @Component({
   selector: 'app-searchform',
   templateUrl: './searchform.component.html',
@@ -12,6 +14,16 @@ export class SearchformComponent implements OnInit {
   myControl = new FormControl();
   options: string[] = ['One', 'Two', 'Three'];
   filteredOptions: Observable<string[]>;
+
+  constructor(public httpService: HttpService) {}
+
+  searchPost(){
+    this.httpService.sendPostRequest();
+  }
+
+  searchGet(){
+    this.httpService.sendGetRequest();
+  }
 
   ngOnInit() {
     this.filteredOptions = this.myControl.valueChanges

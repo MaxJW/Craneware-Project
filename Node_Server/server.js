@@ -1,5 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const cors = require('cors');
 var MongoClient = require('mongodb').MongoClient;
 
 const dbConfig = require('./config/database.config.js');
@@ -8,6 +9,7 @@ const app = express()
 
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
+app.use(cors({ origin: '*' }));
 
 app.listen(8000, () => {
     console.log('Server started!')
