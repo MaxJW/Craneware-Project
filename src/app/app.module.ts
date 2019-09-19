@@ -4,8 +4,9 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { MatTableModule, MatAutocompleteModule, MatFormFieldModule, MatInputModule, MatButtonModule } from '@angular/material';
-
+import { MatTableModule, MatAutocompleteModule, MatFormFieldModule, MatInputModule, MatButtonModule} from '@angular/material';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatSortModule } from '@angular/material/sort';
 import { AppComponent } from './app.component';
 import { SearchformComponent } from './searchform/searchform.component';
 import { MapviewComponent } from './mapview/mapview.component';
@@ -24,7 +25,9 @@ import { TableviewComponent } from './tableview/tableview.component';
     FormsModule,
     ReactiveFormsModule,
     MatTableModule,
+    MatSortModule,
     MatAutocompleteModule,
+    MatPaginatorModule,
     MatFormFieldModule,
     MatInputModule,
     MatButtonModule,
