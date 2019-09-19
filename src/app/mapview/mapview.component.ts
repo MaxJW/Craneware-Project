@@ -6,7 +6,7 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./mapview.component.css']
 })
 export class MapviewComponent implements OnInit {
-
+  
   constructor() { }
 
   ngOnInit() {
