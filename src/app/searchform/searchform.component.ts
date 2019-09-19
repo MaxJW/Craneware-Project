@@ -5,7 +5,6 @@ import { map, startWith } from 'rxjs/operators';
 import { format } from 'util';
 import { trigger, state, transition, animate, style, keyframes } from '@angular/animations';
 import { HttpService } from '../http.service';
-import { exists } from 'fs';
 
 @Component({
   selector: 'app-searchform',
