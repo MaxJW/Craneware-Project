@@ -1,8 +1,9 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
-import { FormControl, Validators, NgModel } from '@angular/forms';
+import { FormControl, Validators, NgModel, FormGroup } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
 import { format } from 'util';
+import { RequireMatch as RequireMatch } from '../requireMatch';
 
 import { HttpService } from '../http.service';
 
@@ -13,13 +14,15 @@ import { HttpService } from '../http.service';
 })
 export class SearchformComponent implements OnInit {
   myControl = new FormControl('', Validators.required);
-  options: string[] = ['One', 'Two', 'Three'];
+  options: string[] = ['652 - KIDNEY TRANSPLANT', '039 - EXTRACRANIAL PROCEDURES W/O CC/MCC', '100 - SEIZURES W MCC'];
   filteredOptions: Observable<string[]>;
 
   constructor(public httpService: HttpService) {}
 
   searchPost(){
-    this.httpService.sendPostRequest();
+    if (this.myControl.errors == null) {
+      this.httpService.sendPostRequest(this.myControl.value);
+    }
   }
 
   searchGet(){

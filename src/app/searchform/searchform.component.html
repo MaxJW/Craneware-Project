@@ -1,7 +1,8 @@
 <div class="search-border">
-    <form (submit)="setSearched()">
+    <form (submit)="setSearched();searchPost()">
         <mat-form-field>
-            <input type="text" class="search-input" placeholder="Enter your condition" aria-label="Number" matInput [formControl]="myControl" [matAutocomplete]="auto" required>
+            <input type="text" class="search-input" placeholder="Enter your condition" aria-label="Number" matInput
+                [formControl]="myControl" [matAutocomplete]="auto" required>
             <mat-autocomplete #auto="matAutocomplete">
                 <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
                     {{option}}
@@ -10,4 +11,6 @@
         </mat-form-field>
         <button mat-button class="blue-button">Enter</button>
     </form>
+    <h3>Send Get Request</h3>
+    <button mat-button (click)="searchGet()">Enter</button>
 </div>
