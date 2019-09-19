@@ -1,7 +1,8 @@
-import {Component, OnInit} from '@angular/core';
-import {FormControl} from '@angular/forms';
-import {Observable} from 'rxjs';
-import {map, startWith} from 'rxjs/operators';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { FormControl, Validators, NgModel } from '@angular/forms';
+import { Observable } from 'rxjs';
+import { map, startWith } from 'rxjs/operators';
+import { format } from 'util';
 
 import { HttpService } from '../http.service';
 
@@ -11,7 +12,7 @@ import { HttpService } from '../http.service';
   styleUrls: ['./searchform.component.css']
 })
 export class SearchformComponent implements OnInit {
-  myControl = new FormControl();
+  myControl = new FormControl('', Validators.required);
   options: string[] = ['One', 'Two', 'Three'];
   filteredOptions: Observable<string[]>;
 
@@ -37,5 +38,12 @@ export class SearchformComponent implements OnInit {
     const filterValue = value.toLowerCase();
 
     return this.options.filter(option => option.toLowerCase().includes(filterValue));
+  }
+
+  @Output() searchToggle = new EventEmitter<boolean>();
+  setSearched() {
+    if (this.myControl.errors == null) {
+      this.searchToggle.emit(true);
+    }
   }
 }

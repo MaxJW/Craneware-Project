@@ -1,7 +1,7 @@
 <div class="img-fill"></div>
 <div class="main">
-    <h1>What's wrong?</h1>
-    <app-searchform></app-searchform>
-    <app-mapview></app-mapview>
-    <app-tableview></app-tableview>
+    <h1 [@slideAdjust]=hasSearched>What's wrong?</h1>
+    <app-searchform (searchToggle)="toggleSearched($event)" [@slideAdjust]=hasSearched></app-searchform>
+    <app-mapview *ngIf="hasSearched" [@slideIn]></app-mapview>
+    <app-tableview *ngIf="hasSearched" [@slideIn]></app-tableview>
 </div>
