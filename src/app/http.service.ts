@@ -8,7 +8,7 @@ export class HttpService{
 
   constructor(private http: HttpClient) { }
 
-  sendPostRequest() {
+  sendPostRequest(data: string) {
     console.log("sending req")
     const headers = new HttpHeaders()
       .set('cache-control', 'no-cache')
@@ -16,7 +16,7 @@ export class HttpService{
 
     const body = new HttpParams({
       fromObject: {
-        drg: '252',
+        drg: data,
       }
     });
 
@@ -26,7 +26,6 @@ export class HttpService{
   }
 
   sendGetRequest() {
-
     return this.http
       .get(this.getbaseUrl)
       .subscribe(res => console.log(res));
