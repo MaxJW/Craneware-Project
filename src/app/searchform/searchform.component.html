@@ -1,5 +1,5 @@
 <div class="search-border">
-    <form (submit)="setSearched();searchPost()">
+    <form (submit)="searchPost()">
         <mat-form-field>
             <input type="text" class="search-input" placeholder="Enter your condition" aria-label="Number" matInput
                 [formControl]="myControl" [matAutocomplete]="auto" required>
@@ -9,8 +9,20 @@
                 </mat-option>
             </mat-autocomplete>
         </mat-form-field>
+        <!-- FILTERS
+        //distance
+        //rating
+        //price-->
         <button mat-button class="blue-button">Enter</button>
     </form>
-    <h3>Send Get Request</h3>
-    <button mat-button (click)="searchGet()">Enter</button>
+
+    <mat-error *ngIf="error == 'exist'" [@slideIn]>
+        Please select an option from the list provided
+    </mat-error>
+    <mat-error *ngIf="error == 'error'" [@slideIn]>
+        Please enter your condition or DRG Code
+    </mat-error>
+
+    <!--<h3>Send Get Request</h3>
+    <button mat-button (click)="searchGet()">Enter</button>-->
 </div>
