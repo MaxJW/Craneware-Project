@@ -6,8 +6,8 @@ export class DataService{
   private searchData;
   private searchDataUpdated = new Subject();
 
-  setSearchData(responce){
-    this.searchData = responce;
+  setSearchData(response){
+    this.searchData = response;
     this.searchDataUpdated.next([...this.searchData]);
   }
 

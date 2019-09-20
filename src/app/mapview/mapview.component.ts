@@ -1,5 +1,8 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { } from 'googlemaps';
+import { Subscription } from 'rxjs';
+
+import { DataService } from '../data.service';
 
 @Component({
   selector: 'app-mapview',
@@ -7,32 +10,81 @@ import { } from 'googlemaps';
   styleUrls: ['./mapview.component.css']
 })
 export class MapviewComponent implements OnInit {
+  //TODO - CENTER MAP: map.setCenter(results[0].geometry.location);
+  //Put this into table so when option clicked, it centers on the chosen pin?
+  //Currently displays top 5 results from search, searches through google maps using place address (street, state, zipcode), then places pins on map
+  //InfoWindow only contains name of pin
+  //Maps
   @ViewChild('map', { static: true }) mapElement: any;
   map: google.maps.Map;
-  infowindow: google.maps.InfoWindow;
   service: google.maps.places.PlacesService;
+  infowindow: google.maps.InfoWindow;
 
-  constructor() { }
+  //Database get
+  searchData;
+  private searchDataSub: Subscription;
+  constructor(public dataService: DataService) { }
 
   ngOnInit(): void {
+    //Get data into searchData
+    this.searchData = this.dataService.getSearchData();
+    this.searchDataSub = this.dataService.getSearchDataUpdateListener()
+      .subscribe((searchData) => {
+        this.searchData = searchData;
+      });
+    console.log(this.searchData);
+    this.initMap();
+  }
+
+  ngOnDestroy() {
+    this.searchDataSub.unsubscribe();
+  }
+
+  createMarker(place: any, current: number) {
+    var marker = new google.maps.Marker({
+      map: this.map,
+      position: place.geometry.location,
+      title: this.searchData[current].providerName
+    });
+
+    var self = this;
+    google.maps.event.addListener(marker, 'click', function () {
+      self.infowindow.setContent(place.name);
+      self.infowindow.open(self.map, this);
+    });
+  }
+
+  initMap() {
     const mapProperties = {
-      center: new google.maps.LatLng(35.2271, -80.8431),
-      zoom: 15,
+      center: new google.maps.LatLng(39.833333, -98.583333),
+      zoom: 5,
       streetViewControl: false,
       mapTypeId: google.maps.MapTypeId.ROADMAP,
     };
     this.map = new google.maps.Map(this.mapElement.nativeElement, mapProperties);
-  }
 
-  createMarker(place: any) {
-    var marker = new google.maps.Marker({
-      map: this.map,
-      position: place.geometry.location
-    });
+    this.infowindow = new google.maps.InfoWindow();
+    this.service = new google.maps.places.PlacesService(this.map);
 
-    google.maps.event.addListener(marker, 'click', function() {
-      this.infowindow.setContent(place.name);
-      this.infowindow.open(this.map, this);
-    });
+    var self = this;
+
+    var request;
+    var myquery;
+    for (var i = 0; i < 5; i++) {
+      console.log(this.searchData[i].providerName);
+      myquery = this.searchData[i].providerStreetAddress + ", " + this.searchData[i].providerCity + ", " + this.searchData[i].providerState + " " + this.searchData[i].providerZipCode;
+      request = {
+        query: this.searchData[i].providerName,
+        fields: ['name', 'geometry'],
+      };
+
+      this.service.findPlaceFromQuery(request, function (results, status) {
+        if (status === google.maps.places.PlacesServiceStatus.OK) {
+          for (var i = 0; i < results.length; i++) {
+            self.createMarker(results[i], i);
+          }
+        }
+      });
+    }
   }
 }
