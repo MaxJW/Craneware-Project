@@ -31,6 +31,8 @@ export class MapviewComponent implements OnInit {
     this.searchDataSub = this.dataService.getSearchDataUpdateListener()
       .subscribe((searchData) => {
         this.searchData = searchData;
+        console.log(this.searchData);
+        this.initMap();
       });
     console.log(this.searchData);
     this.initMap();
@@ -70,7 +72,7 @@ export class MapviewComponent implements OnInit {
 
     var request;
     var myquery;
-    var resultstoget = 2;
+    var resultstoget = 3;
     for (var loop = 0; loop < resultstoget; loop++) {
       console.log(this.searchData[loop].providerName);
       myquery = this.searchData[loop].providerName + ", " + this.searchData[loop].providerStreetAddress + ", " + this.searchData[loop].providerCity + ", " + this.searchData[loop].providerState + " " + this.searchData[loop].providerZipCode;
