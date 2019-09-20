@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { MatSort } from '@angular/material';
+import { MatSort, MatPaginator } from '@angular/material';
 import {MatTableDataSource} from '@angular/material/table';
 import { Subscription } from 'rxjs';
 
@@ -33,6 +33,7 @@ export class TableviewComponent implements OnInit {
   displayedColumns: string[] = ['providerName', 'providerStreetAddress', 'providerCity', 'providerState', 'providerZipCode', 'averageTotalPayments'];
   dataSource = new MatTableDataSource(this.dataService.getSearchData());
   @ViewChild(MatSort, {static: true}) sort: MatSort;
+  @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
   ngOnInit(){
     this.dataSource.data = this.dataService.getSearchData();
     this.searchDataSub = this.dataService.getSearchDataUpdateListener()
@@ -41,7 +42,7 @@ export class TableviewComponent implements OnInit {
         this.dataSource.data = this.searchData;
       });
     this.dataSource.sort = this.sort;
-
+    this.dataSource.paginator = this.paginator;
   }
 
   ngOnDestroy() {
@@ -49,12 +50,3 @@ export class TableviewComponent implements OnInit {
   }
 
 }
-
-
-
-//export class TableviewComponent implements OnInit {
-//  displayedColumns: string[] = ['drgCode', 'drgDefinition', 'providerName', 'providerStreetAddress', 'providerCity', 'providerState', 'providerZipCode', 'averageTotalPayments'];
-//  dataSource = new MatTableDataSource(CONDITION_DATA);
-//  @ViewChild(MatSort, {static: true}) sort: MatSort;
-//  ngOnInit(){this.dataSource.sort = this.sort;}
-//}
