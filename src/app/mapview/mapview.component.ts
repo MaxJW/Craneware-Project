@@ -70,7 +70,7 @@ export class MapviewComponent implements OnInit {
 
     var request;
     var myquery;
-    var resultstoget = 5;
+    var resultstoget = 2;
     for (var loop = 0; loop < resultstoget; loop++) {
       console.log(this.searchData[loop].providerName);
       myquery = this.searchData[loop].providerName + ", " + this.searchData[loop].providerStreetAddress + ", " + this.searchData[loop].providerCity + ", " + this.searchData[loop].providerState + " " + this.searchData[loop].providerZipCode;
