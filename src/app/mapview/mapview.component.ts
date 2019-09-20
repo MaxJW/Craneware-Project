@@ -40,11 +40,11 @@ export class MapviewComponent implements OnInit {
     this.searchDataSub.unsubscribe();
   }
 
-  createMarker(place: any, current: number) {
+  createMarker(place: any) {
     var marker = new google.maps.Marker({
       map: this.map,
       position: place.geometry.location,
-      title: this.searchData[current].providerName
+      title: place.name
     });
 
     var self = this;
@@ -70,19 +70,21 @@ export class MapviewComponent implements OnInit {
 
     var request;
     var myquery;
-    for (var i = 0; i < 5; i++) {
-      console.log(this.searchData[i].providerName);
-      myquery = this.searchData[i].providerStreetAddress + ", " + this.searchData[i].providerCity + ", " + this.searchData[i].providerState + " " + this.searchData[i].providerZipCode;
+    var resultstoget = 5;
+    for (var loop = 0; loop < resultstoget; loop++) {
+      console.log(this.searchData[loop].providerName);
+      myquery = this.searchData[loop].providerName + ", " + this.searchData[loop].providerStreetAddress + ", " + this.searchData[loop].providerCity + ", " + this.searchData[loop].providerState + " " + this.searchData[loop].providerZipCode;
       request = {
-        query: this.searchData[i].providerName,
+        query: myquery,
         fields: ['name', 'geometry'],
       };
 
       this.service.findPlaceFromQuery(request, function (results, status) {
         if (status === google.maps.places.PlacesServiceStatus.OK) {
           for (var i = 0; i < results.length; i++) {
-            self.createMarker(results[i], i);
+            self.createMarker(results[i]);
           }
+          self.map.setCenter(results[0].geometry.location);
         }
       });
     }
