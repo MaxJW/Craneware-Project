@@ -91,4 +91,8 @@ export class MapviewComponent implements OnInit {
       });
     }
   }
+
+  centerMapPlease(data) {
+    console.log("Centering!", data)
+  }
 }
