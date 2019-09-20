@@ -1,6 +1,9 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatSort } from '@angular/material';
 import {MatTableDataSource} from '@angular/material/table';
+import { Subscription } from 'rxjs';
+
+import { DataService } from '../data.service';
 
 export interface Condition {
   drgCode: string,
@@ -23,9 +26,37 @@ const CONDITION_DATA: Condition[] = [
   templateUrl: './tableview.component.html',
   styleUrls: ['./tableview.component.css']
 })
+
 export class TableviewComponent implements OnInit {
+  searchData;
+  private searchDataSub: Subscription;
+  constructor(public dataService: DataService) { }
+
   displayedColumns: string[] = ['drgCode', 'drgDefinition', 'providerName', 'providerStreetAddress', 'providerCity', 'providerState', 'providerZipCode', 'averageTotalPayments'];
-  dataSource = new MatTableDataSource(CONDITION_DATA);
+  dataSource = new MatTableDataSource(this.dataService.getSearchData());
   @ViewChild(MatSort, {static: true}) sort: MatSort;
-  ngOnInit(){this.dataSource.sort = this.sort;}
+  ngOnInit(){
+    this.dataSource.data = this.dataService.getSearchData();
+    this.searchDataSub = this.dataService.getSearchDataUpdateListener()
+      .subscribe((searchData) => {
+        this.searchData = searchData;
+        this.dataSource.data = this.searchData;
+      });
+    this.dataSource.sort = this.sort;
+
+  }
+
+  ngOnDestroy() {
+    this.searchDataSub.unsubscribe();
+  }
+
 }
+
+
+
+//export class TableviewComponent implements OnInit {
+//  displayedColumns: string[] = ['drgCode', 'drgDefinition', 'providerName', 'providerStreetAddress', 'providerCity', 'providerState', 'providerZipCode', 'averageTotalPayments'];
+//  dataSource = new MatTableDataSource(CONDITION_DATA);
+//  @ViewChild(MatSort, {static: true}) sort: MatSort;
+//  ngOnInit(){this.dataSource.sort = this.sort;}
+//}

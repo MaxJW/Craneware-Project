@@ -22,6 +22,7 @@ import { HttpService } from '../http.service';
 export class SearchformComponent implements OnInit {
   haha: boolean = true;
   error: string = 'false';
+  //public data: any;
   myControl = new FormControl('', Validators.required);
   options: string[] = ['001 - HEART TRANSPLANT OR IMPLANT OF HEART ASSIST SYSTEM WITH MCC',
   '002 - HEART TRANSPLANT OR IMPLANT OF HEART ASSIST SYSTEM WITHOUT MCC',
@@ -787,18 +788,21 @@ export class SearchformComponent implements OnInit {
 
   constructor(public httpService: HttpService) { }
 
-  searchPost() {
+  async searchPost() {
     if (this.myControl.errors == null) {
       if (this.existsInArray()) {
         this.error = 'false';
-        this.httpService.sendPostRequest(this.myControl.value.substring(0, 3));
-        this.setSearched()
+        await this.httpService.sendPostRequest(this.myControl.value.substring(0, 3));
+        this.setSearched();
       } else {
         this.error = 'exist';
       }
     } else {
       this.error = 'error';
     }
+
+    //this.data = this.httpService.responce;
+    //console.log(this.data)
   }
 
   searchGet() {
