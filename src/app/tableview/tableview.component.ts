@@ -6,8 +6,6 @@ import { Subscription } from 'rxjs';
 import { DataService } from '../data.service';
 
 export interface Condition {
-  drgCode: string,
-  drgDefinition: string,
   providerName: string,
   providerStreetAddress: string,
   providerCity: string,
@@ -17,8 +15,8 @@ export interface Condition {
 }
 
 const CONDITION_DATA: Condition[] = [
-  {drgCode: '293', drgDefinition: 'Fractured Tibia', providerName: 'Cerys Memorial Hospital', providerStreetAddress: 'Hospital Street', providerCity: 'Ceryshire', providerState: 'Kelly', providerZipCode: "111111", averageTotalPayments: '£1000000'},
-  {drgCode: '001', drgDefinition: 'Broken Heart', providerName: 'Lucy Memorial Hospital', providerStreetAddress: 'Healing Road', providerCity: 'Lucyshire', providerState: 'Taylor', providerZipCode: "222222", averageTotalPayments: '£999999'},
+  {providerName: 'Cerys Memorial Hospital', providerStreetAddress: 'Hospital Street', providerCity: 'Ceryshire', providerState: 'Kelly', providerZipCode: "111111", averageTotalPayments: '£1000000'},
+  {providerName: 'Lucy Memorial Hospital', providerStreetAddress: 'Healing Road', providerCity: 'Lucyshire', providerState: 'Taylor', providerZipCode: "222222", averageTotalPayments: '£999999'},
 ];
 
 @Component({
@@ -32,7 +30,7 @@ export class TableviewComponent implements OnInit {
   private searchDataSub: Subscription;
   constructor(public dataService: DataService) { }
 
-  displayedColumns: string[] = ['drgCode', 'drgDefinition', 'providerName', 'providerStreetAddress', 'providerCity', 'providerState', 'providerZipCode', 'averageTotalPayments'];
+  displayedColumns: string[] = ['providerName', 'providerStreetAddress', 'providerCity', 'providerState', 'providerZipCode', 'averageTotalPayments'];
   dataSource = new MatTableDataSource(this.dataService.getSearchData());
   @ViewChild(MatSort, {static: true}) sort: MatSort;
   ngOnInit(){
