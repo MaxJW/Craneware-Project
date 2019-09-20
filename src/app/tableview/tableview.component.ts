@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, Output, EventEmitter } from '@angular/core';
 import { MatSort, MatPaginator } from '@angular/material';
 import {MatTableDataSource} from '@angular/material/table';
 import { Subscription } from 'rxjs';
@@ -49,4 +49,11 @@ export class TableviewComponent implements OnInit {
     this.searchDataSub.unsubscribe();
   }
 
+  testingFunc(data) {
+    console.log(data.providerName + " selected!");
+  }
+  @Output() mapSelection = new EventEmitter<string>();
+  setSearched(data) {
+      this.mapSelection.emit(data);
+  }
 }
