@@ -6,6 +6,7 @@ import { DataService } from './data.service';
 @Injectable({providedIn: 'root'})
 export class HttpService{
   searchDrgUrl: string = 'http://104.248.165.91:8000/api/searchDRG';
+  searchDrgLatestYearUrl: string = 'http://104.248.165.91:8000/api/searchDRGLatestYear';
   getbaseUrl: string = 'http://104.248.165.91:8000/';
 
   public responce: any;
@@ -25,13 +26,13 @@ export class HttpService{
     });
 
     return this.http
-      .post(this.searchDrgUrl, body, { headers }).toPromise().then(res => { this.responce = res, this.dataService.setSearchData(this.responce); } );
-      //.subscribe(res => this.responce = res);
+      .post(this.searchDrgLatestYearUrl, body, { headers }).toPromise().then(res => { this.responce = res, this.dataService.setSearchData(this.responce); } );
+      // .subscribe(res => this.responce = res);
   }
 
   sendGetRequest() {
     return this.http
       .get(this.getbaseUrl).toPromise().then(res => console.log(res));
-      //.subscribe(res => console.log(res));
+      // .subscribe(res => console.log(res));
   }
 }
