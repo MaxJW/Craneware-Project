@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { trigger, state, transition, animate, style } from '@angular/animations';
 
 @Component({
@@ -20,10 +20,14 @@ import { trigger, state, transition, animate, style } from '@angular/animations'
     ]),
   ]
 })
-export class AppComponent { 
+export class AppComponent {
   hasSearched: boolean = false;
-
+  mapSelect: any;
   toggleSearched(val: boolean) {
     this.hasSearched = val;
+  }
+  
+  mapSelected(data) {
+    this.mapSelect = data;
   }
 }
