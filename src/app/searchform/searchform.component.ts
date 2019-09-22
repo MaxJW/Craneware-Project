@@ -788,7 +788,10 @@ export class SearchformComponent implements OnInit {
 
   constructor(public httpService: HttpService) { }
 
+  public loading = false;
+
   async searchPost() {
+    this.loading = true;
     if (this.myControl.errors == null) {
       if (this.existsInArray()) {
         this.error = 'false';
@@ -800,6 +803,7 @@ export class SearchformComponent implements OnInit {
     } else {
       this.error = 'error';
     }
+    this.loading = false;
 
     //this.data = this.httpService.responce;
     //console.log(this.data)
