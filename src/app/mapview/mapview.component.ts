@@ -73,6 +73,9 @@ export class MapviewComponent implements OnInit {
     var request;
     var myquery;
     var resultstoget = 3;
+
+    var destination = [];
+
     for (var loop = 0; loop < resultstoget; loop++) {
       console.log(this.searchData[loop].providerName);
       myquery = this.searchData[loop].providerName + ", " + this.searchData[loop].providerStreetAddress + ", " + this.searchData[loop].providerCity + ", " + this.searchData[loop].providerState + " " + this.searchData[loop].providerZipCode;
@@ -85,9 +88,37 @@ export class MapviewComponent implements OnInit {
         if (status === google.maps.places.PlacesServiceStatus.OK) {
           for (var i = 0; i < results.length; i++) {
             self.createMarker(results[i]);
+            destination.push(results[i]);
           }
           self.map.setCenter(results[0].geometry.location);
         }
+
+        var services = new google.maps.DistanceMatrixService();
+        services.getDistanceMatrix(
+          {
+            origins: ["1707 Pleasant Valley Rd, Fairmont, WV 26554"],
+            destinations: [results[0].geometry.location], //["DUKE UNIVERSITY HOSPITAL, PO BOX 3708 DUMC ERWIN RD,	DURHAM,	NC,	27710","CLEVELAND CLINIC,	9500 EUCLID AVENUE,	CLEVELAND,	OH,	44195", "HOSPITAL OF UNIV OF PENNSYLVANIA,	34TH & SPRUCE STS,	PHILADELPHIA,	PA,	19104"],
+            travelMode: google.maps.TravelMode.DRIVING,
+            unitSystem: google.maps.UnitSystem.IMPERIAL,
+            avoidHighways: false,
+            avoidTolls: false
+          }, (response: any) => {
+              var ori = response.originAddresses;
+              var desti = response.destinationAddresses;
+
+              for (var k = 0; k < ori.length; k++) {
+                var results = response.rows[k].elements;
+                for (var j = 0; j < results.length; j++) {
+                  console.log(ori[k] + ' to ' + desti[j] + ': ' + results[j].distance.text + ' in ' + results[j].duration.text);
+                }
+              }
+          });
+  
+
+
+
+
+
       });
     }
   }
@@ -95,4 +126,5 @@ export class MapviewComponent implements OnInit {
   centerMapPlease(data) {
     console.log("Centering!", data)
   }
+
 }
