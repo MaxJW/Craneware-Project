@@ -1,0 +1,32 @@
+:host {
+    width: 80%;
+    margin-bottom: 20px;
+    overflow: scroll;
+    overflow-y: hidden;
+    overflow-x: hidden;
+    box-shadow: 0px 3px 15px rgba(0, 0, 0, 0.2);
+}
+
+table {
+    width: 100%;
+    overflow: scroll;
+    background-color: white;
+    border-radius: 4px;
+    border-collapse: separate;
+}
+
+/* Round table corners */
+tr:first-child th:first-child { border-top-left-radius: 10px; }
+tr:first-child th:last-child { border-top-right-radius: 10px; }
+mat-paginator {
+    width: 100%;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px; 
+}
+
+@media only screen and (max-width: 768px) {
+    :host {
+        width: 95%;
+        overflow-x: auto;
+    }
+}

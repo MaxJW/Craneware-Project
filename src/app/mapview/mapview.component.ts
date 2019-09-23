@@ -24,6 +24,7 @@ export class MapviewComponent implements OnInit {
   searchData;
   private searchDataSub: Subscription;
   constructor(public dataService: DataService) { }
+  distances = [];
 
   ngOnInit(): void {
     //Get data into searchData
@@ -56,7 +57,7 @@ export class MapviewComponent implements OnInit {
     });
   }
 
-  initMap() {
+  async initMap() {
     const mapProperties = {
       center: new google.maps.LatLng(39.833333, -98.583333),
       zoom: 5,
@@ -73,58 +74,81 @@ export class MapviewComponent implements OnInit {
     var request;
     var myquery;
     var resultstoget = 3;
-
-    var destination = [];
-
+    self.distances = [];
     for (var loop = 0; loop < resultstoget; loop++) {
-      console.log(this.searchData[loop].providerName);
+      console.log(self.searchData[loop].providerName);
       myquery = this.searchData[loop].providerName + ", " + this.searchData[loop].providerStreetAddress + ", " + this.searchData[loop].providerCity + ", " + this.searchData[loop].providerState + " " + this.searchData[loop].providerZipCode;
       request = {
         query: myquery,
         fields: ['name', 'geometry'],
       };
-
-      this.service.findPlaceFromQuery(request, function (results, status) {
-        if (status === google.maps.places.PlacesServiceStatus.OK) {
-          for (var i = 0; i < results.length; i++) {
-            self.createMarker(results[i]);
-            destination.push(results[i]);
-          }
-          self.map.setCenter(results[0].geometry.location);
-        }
-
-        var services = new google.maps.DistanceMatrixService();
-        services.getDistanceMatrix(
-          {
-            origins: ["1707 Pleasant Valley Rd, Fairmont, WV 26554"],
-            destinations: [results[0].geometry.location], //["DUKE UNIVERSITY HOSPITAL, PO BOX 3708 DUMC ERWIN RD,	DURHAM,	NC,	27710","CLEVELAND CLINIC,	9500 EUCLID AVENUE,	CLEVELAND,	OH,	44195", "HOSPITAL OF UNIV OF PENNSYLVANIA,	34TH & SPRUCE STS,	PHILADELPHIA,	PA,	19104"],
-            travelMode: google.maps.TravelMode.DRIVING,
-            unitSystem: google.maps.UnitSystem.IMPERIAL,
-            avoidHighways: false,
-            avoidTolls: false
-          }, (response: any) => {
-              var ori = response.originAddresses;
-              var desti = response.destinationAddresses;
-
-              for (var k = 0; k < ori.length; k++) {
-                var results = response.rows[k].elements;
-                for (var j = 0; j < results.length; j++) {
-                  console.log(ori[k] + ' to ' + desti[j] + ': ' + results[j].distance.text + ' in ' + results[j].duration.text);
-                }
-              }
-          });
-  
-
-
-
-
-
-      });
+     //console.log(self.findPlaceFromQuery(request, resultstoget, loop));
+     //distances.push(self.findPlaceFromQuery(request, resultstoget, loop));
+     self.findPlaceFromQuery(request, resultstoget, loop)
     }
+    await self.dataService.setDistanceData(self.distances);
   }
 
   centerMapPlease(data) {
     console.log("Centering!", data)
   }
+
+
+  findPlaceFromQuery(request, resultstoget, loop){
+    var self = this;
+    self.service.findPlaceFromQuery(request, async function (results, status) {
+      if (status === google.maps.places.PlacesServiceStatus.OK) {
+        for (var i = 0; i < results.length; i++) {
+          //console.log(results[i]);
+          self.createMarker(results[i]);
+          await self.calculateDistance(results[i], self.searchData[loop].providerId, self.searchData[loop].providerName);
+          //console.log(await self.calculateDistance(results[i], self.searchData[loop].providerId));
+        }
+        self.map.setCenter(results[0].geometry.location);
+      }
+    });
+  }
+
+  async calculateDistance(location, providerId, providerName) {
+    var selectedHospitals = this.dataService.getSearchData();
+    var currentLocation = ['Fike Park, Colby, KS 67701'];
+
+    let service = new google.maps.DistanceMatrixService();
+    await service.getDistanceMatrix(
+      {
+        origins: currentLocation,
+        destinations: [location.geometry.location],
+        travelMode: google.maps.TravelMode.DRIVING,
+        unitSystem: google.maps.UnitSystem.IMPERIAL,
+        avoidHighways: false,
+        avoidTolls: false
+      }, (response: any) => {
+          let ori = response.originAddresses;
+          let desti = response.destinationAddresses;
+          for (let k = 0; k < ori.length; k++) {
+            let results = response.rows[k].elements;
+            //console.log(results);
+            for (let j = 0; j < results.length; j++) {
+              const travel = {
+                providerId: providerId,
+                providerName: providerName,
+                from: ori[k],
+                to: desti[j],
+                distance: results[j].distance.text,
+                duration: results[j].duration.text
+                };
+                this.distances.push(travel);
+                console.log(providerId +': ' + ori[k] + ' to ' + desti[j] + ': ' + results[j].distance.text + ' in ' + results[j].duration.text);
+                //this.dataService.setDistanceData(travel);
+                //console.log(providerId +': ' + ori[k] + ' to ' + desti[j] + ': ' + results[j].distance.text + ' in ' + results[j].duration.text);
+              }
+            }
+        });
+    }
+
+
+
+
+
 
 }
