@@ -4,4 +4,5 @@
     <app-searchform (searchToggle)="toggleSearched($event)" [@slideAdjust]=hasSearched></app-searchform>
     <app-mapview *ngIf="hasSearched" [@slideIn]></app-mapview>
     <app-tableview (mapSelection)="mapSelected($event)" *ngIf="hasSearched" [@slideIn]></app-tableview>
+    <app-distancetable (mapSelection)="mapSelected($event)" *ngIf="hasSearched" [@slideIn]></app-distancetable>
 </div>

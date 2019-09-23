@@ -10,13 +10,15 @@ import { AppComponent } from './app.component';
 import { SearchformComponent } from './searchform/searchform.component';
 import { MapviewComponent } from './mapview/mapview.component';
 import { TableviewComponent } from './tableview/tableview.component';
+import { DistancetableComponent } from './distancetable/distancetable.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     SearchformComponent,
     MapviewComponent,
-    TableviewComponent
+    TableviewComponent,
+    DistancetableComponent
   ],
   imports: [
     BrowserModule,
