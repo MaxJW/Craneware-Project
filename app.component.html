@@ -1,0 +1,8 @@
+<div class="img-fill"></div>
+<div class="main">
+        <ng-keyboard-shortcuts [shortcuts]="shortcuts"></ng-keyboard-shortcuts>
+    <h1 [@slideAdjust]=hasSearched>What's wrong?</h1>
+    <app-searchform (searchToggle)="toggleSearched($event)" [@slideAdjust]=hasSearched></app-searchform>
+    <app-mapview *ngIf="hasSearched" [@slideIn]></app-mapview>
+    <app-tableview (mapSelection)="mapSelected($event)" *ngIf="hasSearched" [@slideIn]></app-tableview>
+</div>
