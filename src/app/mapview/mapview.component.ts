@@ -82,19 +82,18 @@ export class MapviewComponent implements OnInit {
         query: myquery,
         fields: ['name', 'geometry'],
       };
-     //console.log(self.findPlaceFromQuery(request, resultstoget, loop));
-     //distances.push(self.findPlaceFromQuery(request, resultstoget, loop));
-     self.findPlaceFromQuery(request, resultstoget, loop)
+      //console.log(self.findPlaceFromQuery(request, resultstoget, loop));
+      //distances.push(self.findPlaceFromQuery(request, resultstoget, loop));
+      self.findPlaceFromQuery(request, resultstoget, loop)
     }
-    await self.dataService.setDistanceData(self.distances);
+    self.dataService.setDistanceData(self.distances);
   }
 
   centerMapPlease(data) {
     console.log("Centering!", data)
   }
 
-
-  findPlaceFromQuery(request, resultstoget, loop){
+  findPlaceFromQuery(request, resultstoget, loop) {
     var self = this;
     self.service.findPlaceFromQuery(request, async function (results, status) {
       if (status === google.maps.places.PlacesServiceStatus.OK) {
@@ -123,32 +122,26 @@ export class MapviewComponent implements OnInit {
         avoidHighways: false,
         avoidTolls: false
       }, (response: any) => {
-          let ori = response.originAddresses;
-          let desti = response.destinationAddresses;
-          for (let k = 0; k < ori.length; k++) {
-            let results = response.rows[k].elements;
-            //console.log(results);
-            for (let j = 0; j < results.length; j++) {
-              const travel = {
-                providerId: providerId,
-                providerName: providerName,
-                from: ori[k],
-                to: desti[j],
-                distance: results[j].distance.text,
-                duration: results[j].duration.text
-                };
-                this.distances.push(travel);
-                console.log(providerId +': ' + ori[k] + ' to ' + desti[j] + ': ' + results[j].distance.text + ' in ' + results[j].duration.text);
-                //this.dataService.setDistanceData(travel);
-                //console.log(providerId +': ' + ori[k] + ' to ' + desti[j] + ': ' + results[j].distance.text + ' in ' + results[j].duration.text);
-              }
-            }
-        });
-    }
-
-
-
-
-
-
+        let ori = response.originAddresses;
+        let desti = response.destinationAddresses;
+        for (let k = 0; k < ori.length; k++) {
+          let results = response.rows[k].elements;
+          //console.log(results);
+          for (let j = 0; j < results.length; j++) {
+            const travel = {
+              providerId: providerId,
+              providerName: providerName,
+              from: ori[k],
+              to: desti[j],
+              distance: results[j].distance.text,
+              duration: results[j].duration.text
+            };
+            this.distances.push(travel);
+            console.log(providerId + ': ' + ori[k] + ' to ' + desti[j] + ': ' + results[j].distance.text + ' in ' + results[j].duration.text);
+            //this.dataService.setDistanceData(travel);
+            //console.log(providerId +': ' + ori[k] + ' to ' + desti[j] + ': ' + results[j].distance.text + ' in ' + results[j].duration.text);
+          }
+        }
+      });
+  }
 }

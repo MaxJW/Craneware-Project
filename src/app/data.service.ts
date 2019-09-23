@@ -23,7 +23,6 @@ export class DataService{
   }
 
   setDistanceData(distance){
-    console.log(distance);
     this.distanceData = distance;
     this.distanceDataUpdated.next(this.distanceData);
   }

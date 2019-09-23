@@ -33,14 +33,8 @@ export class DistancetableComponent implements OnInit{
     this.dataSource.paginator = this.paginator;
   }
   
-
   ngOnDestroy() {
     this.distanceDataSub.unsubscribe();
-  }
-
-  @Output() mapSelection = new EventEmitter<string>();
-  setSearched(data) {
-      this.mapSelection.emit(data);
   }
 }
 
