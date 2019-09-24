@@ -127,6 +127,7 @@ export class MapviewComponent implements OnInit {
     var self = this;
     google.maps.event.addListener(marker, 'click', function () {
       self.infowindow.setContent(place.name);
+      self.infowindow.open(self.map, this);
     });
   }
 
