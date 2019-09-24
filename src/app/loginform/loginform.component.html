@@ -11,7 +11,7 @@
         <tr>
           <td>
             <mat-form-field appearance="outline">
-              <input matInput placeholder="Username" name="username" aria-label="username" required>
+              <input matInput placeholder="Username" [(ngModel)]="username" name="username" aria-label="username" required>
             </mat-form-field>
           </td>
         </tr>
@@ -19,7 +19,7 @@
         <tr>
           <td>
             <mat-form-field appearance="outline">
-              <input matInput placeholder="Password" type="password" name="password" aria-label="password" required>
+              <input matInput placeholder="Password" [(ngModel)]="password" type="password" name="password" aria-label="password" required>
             </mat-form-field>
           </td>
         </tr>

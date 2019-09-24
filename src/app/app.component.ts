@@ -23,7 +23,7 @@ import { ShortcutInput, ShortcutEventOutput } from 'ng-keyboard-shortcuts';
 })
 export class AppComponent {
   hasSearched: boolean = false;
-  adminControl: boolean = false;
+  loginform: boolean = false;
   mapSelect: any;
   shortcuts: ShortcutInput[] = [];
 
@@ -43,7 +43,7 @@ export class AppComponent {
         key: ["up up down down left right left right b a enter"],
         label: "AdminPanel",
         description: "AdminTest",
-        command: (output: ShortcutEventOutput) => this.adminControl = true
+        command: (output: ShortcutEventOutput) => this.loginform = true
       }
     );
   }

@@ -1,6 +1,6 @@
 <div class="img-fill"></div>
 <div class="main">
-    <span class="notAdmin" *ngIf="!adminControl">
+    <span class="notAdmin" *ngIf="!loginform">
         <ng-keyboard-shortcuts [shortcuts]="shortcuts"></ng-keyboard-shortcuts>
         <h1 [@slideAdjust]=hasSearched>What's wrong?</h1>
         <app-searchform (searchToggle)="toggleSearched($event)" [@slideAdjust]=hasSearched></app-searchform>
@@ -8,5 +8,5 @@
         <app-tableview (mapSelection)="mapSelected($event)" *ngIf="hasSearched" [@slideIn]></app-tableview>
         <app-distancetable *ngIf="hasSearched" [@slideIn]></app-distancetable>
     </span>
-    <app-admin-login *ngIf="adminControl"></app-admin-login>
+    <app-loginform *ngIf="loginform"></app-loginform>
 </div>
