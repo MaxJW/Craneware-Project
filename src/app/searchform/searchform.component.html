@@ -1,27 +1,61 @@
 <div class="search-border">
     <form (submit)="searchPost()">
-        <mat-form-field>
-            <input type="text" class="search-input" placeholder="Enter your condition" aria-label="Number" matInput
-                [formControl]="myControl" [matAutocomplete]="auto" required>
-            <mat-autocomplete #auto="matAutocomplete">
-                <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
-                    {{option}}
-                </mat-option>
-            </mat-autocomplete>
-        </mat-form-field>
+        <div class="search">
+            <div class="main-search">
+                <mat-form-field>
+                    <input type="text" class="search-input" placeholder="Enter your condition" aria-label="Number" matInput [formControl]="myControl" [matAutocomplete]="auto" required>
+                    <mat-autocomplete #auto="matAutocomplete">
+                        <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
+                            {{option}}
+                        </mat-option>
+                    </mat-autocomplete>
+                </mat-form-field>
+
+                <mat-error *ngIf="error == 'exist'" [@slideIn]>
+                    Please select an option from the list provided
+                </mat-error>
+                <mat-error *ngIf="error == 'error'" [@slideIn]>
+                    Please enter your condition or DRG Code
+                </mat-error>
+            </div>
+            <div class="search-options">
+                <mat-form-field>
+                    <mat-label>Distance</mat-label>
+                    <mat-select [(value)]="selected">
+                        <mat-option>None</mat-option>
+                        <mat-option value="option1">
+                            <500m</mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <mat-form-field>
+                    <mat-label>Price</mat-label>
+                    <mat-select [(value)]="selected">
+                        <mat-option>None</mat-option>
+                        <mat-option value="option1">
+                            <$10,000</mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <mat-form-field>
+                    <mat-label>Rating</mat-label>
+                    <mat-select [(value)]="selected">
+                        <mat-option>None</mat-option>
+                        <mat-option value="option1">⭐5</mat-option>
+                        <mat-option value="option1">⭐4</mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+        </div>
+        <div class="search-button">
+            <button mat-button class="blue-button">Enter</button>
+        </div>
         <!-- FILTERS
         //distance
         //rating
         //price-->
-        <button mat-button class="blue-button">Enter</button>
+
     </form>
 
-    <mat-error *ngIf="error == 'exist'" [@slideIn]>
-        Please select an option from the list provided
-    </mat-error>
-    <mat-error *ngIf="error == 'error'" [@slideIn]>
-        Please enter your condition or DRG Code
-    </mat-error>
+
 
     <!--<h3>Send Get Request</h3>
     <button mat-button (click)="searchGet()">Enter</button>-->
