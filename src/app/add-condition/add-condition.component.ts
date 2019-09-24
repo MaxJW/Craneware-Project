@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, Validators, NgModel, FormGroup } from '@angular/forms';
+import { FormControl, Validators, NgModel, FormGroup, FormBuilder } from '@angular/forms';
 
 
 @Component({
@@ -9,9 +9,26 @@ import { FormControl, Validators, NgModel, FormGroup } from '@angular/forms';
 })
 export class AddConditionComponent implements OnInit {
 
-  constructor() { }
+  addConditionForm;
+
+  constructor(private formBuilder: FormBuilder) { 
+    this.addConditionForm = this.formBuilder.group({
+      drgCode: ['', Validators.required],
+      drgDefinition: ['', Validators.required],
+      providerId: ['', Validators.required],
+      providerName: ['', Validators.required],
+      providerStreetAddress: ['', Validators.required]
+    });
+  }
 
   ngOnInit() {
+  }
+
+  onSubmit(data) {
+    // Process form data here
+    console.log('New condition submitted', data);
+
+    this.addConditionForm.reset();
   }
 
 }

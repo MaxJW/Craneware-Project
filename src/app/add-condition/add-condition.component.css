@@ -1,13 +1,12 @@
-.menu-form-wrapper .mat-menu-content:not(:empty) {
-    padding: 0;
-  }
-  
-  .menu-form-wrapper .menu-form {
-    display: flex;
-    flex-direction: column;
-    padding: 24px;
-  }
+:host {
+  width: 95%;
+  padding-top: 50px;
+}
 
-.mat-button {
-    background-color: whitesmoke;
-}  
+mat-form-field {
+  width: 100%;
+}
+
+.button {
+  background-color: rgb(94, 187, 94);
+}

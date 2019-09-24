@@ -1,45 +1,29 @@
-<button mat-button [matMenuTriggerFor]="menu" #trigger="matMenuTrigger">Add new condition</button>
-<mat-menu #menu="matMenu" class="menu-form-wrapper" [hasBackdrop]="false">
+<mat-expansion-panel>
+  <mat-expansion-panel-header>
+    <mat-panel-title>
+      <b>Add new condition</b>
+    </mat-panel-title>
+    <mat-panel-description>
+      ...
+    </mat-panel-description>
+  </mat-expansion-panel-header>
+  <form [formGroup]="addConditionForm" (ngSubmit)="onSubmit(addConditionForm.value)">
+    <mat-form-field>
+      <input matInput placeholder="drgCode" id="drgCode" type="text" formControlName="drgCode" required>
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput placeholder="drgDefinition" id="drgDefinition" type="text" formControlName="drgDefinition" required>
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput placeholder="Provider ID" id="providerId" type="text" formControlName="providerId" required>
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput placeholder="Provider Name" id="providerName" type="text" formControlName="providerName" required>
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput placeholder="Provider Street Address" id="providerStreetAddress" type="text" formControlName="providerStreetAddress" required>
+    </mat-form-field>
+      <button mat-button class="button" type="submit">Submit</button>
+  </form>
+</mat-expansion-panel>
 
-  <div (click)="$event.stopPropagation()" (keydown)="$event.stopPropagation()">
-
-    <form class="menu-form">
-
-      <h3>Edit Customer</h3>
-
-      <mat-form-field>
-        <mat-label>Name</mat-label>
-        <input matInput type="text">
-      </mat-form-field>
-
-      <mat-form-field>
-        <mat-label>Phone</mat-label>
-        <input matInput type="text">
-      </mat-form-field>
-
-      <mat-form-field>
-        <mat-label>Email</mat-label>
-        <input matInput type="text">
-      </mat-form-field>
-
-      <mat-form-field>
-        <mat-label>Facebook ID</mat-label>
-        <input matInput type="text">
-      </mat-form-field>
-
-      <mat-form-field>
-        <mat-label>UID</mat-label>
-        <input matInput type="text">
-      </mat-form-field>
-
-      <span>
-        <button mat-raised-button (click)="trigger.closeMenu()">Cancel</button>
-        &nbsp;
-        <button mat-raised-button>Save Changes</button>
-      </span>
-
-    </form>
-
-  </div>
-
-</mat-menu>
