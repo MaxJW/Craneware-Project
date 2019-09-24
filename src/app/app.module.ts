@@ -3,7 +3,7 @@ import { NgModule } from '@angular/core';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { MatTableModule, MatAutocompleteModule, MatFormFieldModule, MatInputModule, MatButtonModule, MatPaginatorModule, MatSortModule} from '@angular/material';
+import { MatTableModule, MatAutocompleteModule, MatFormFieldModule, MatInputModule, MatButtonModule, MatPaginatorModule, MatSortModule, MatSelectModule} from '@angular/material';
 import { NgxLoadingModule, ngxLoadingAnimationTypes  } from 'ngx-loading';
 import { KeyboardShortcutsModule } from "ng-keyboard-shortcuts";
 import { AppRoutingModule } from './app-routing.module';
@@ -36,6 +36,7 @@ import { AdminLoginComponent } from './admin-login/admin-login.component';
     MatFormFieldModule,
     MatInputModule,
     MatButtonModule,
+    MatSelectModule,
     HttpClientModule,
     AppRoutingModule,
     KeyboardShortcutsModule,
