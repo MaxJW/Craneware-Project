@@ -14,6 +14,7 @@ import { MapviewComponent } from './mapview/mapview.component';
 import { TableviewComponent } from './tableview/tableview.component';
 import { DistancetableComponent } from './distancetable/distancetable.component';
 import { AdminLoginComponent } from './admin-login/admin-login.component';
+import { LoginformComponent } from './loginform/loginform.component';
 
 @NgModule({
   declarations: [
@@ -22,7 +23,8 @@ import { AdminLoginComponent } from './admin-login/admin-login.component';
     MapviewComponent,
     TableviewComponent,
     DistancetableComponent,
-    AdminLoginComponent
+    AdminLoginComponent,
+    LoginformComponent
   ],
   imports: [
     BrowserModule,
