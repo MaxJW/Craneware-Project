@@ -35,6 +35,11 @@ export class AppComponent {
     this.mapSelect = data;
   }
 
+  loginHider(val: boolean)
+  {
+    this.loginform = val;
+  }
+
   ngAfterViewInit()
   {
     this.shortcuts.push

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
@@ -12,6 +12,8 @@ export class LoginformComponent implements OnInit {
 
   username: string;
   password: string;
+  passwordCorrect: boolean = false;
+  loginform: boolean;
 
   ngOnInit() 
   {}
@@ -23,6 +25,8 @@ export class LoginformComponent implements OnInit {
     {
   
      /** Navigate To Page After Login Page */
+     this.passwordCorrect =true;
+     this.setLoginHidden();
      
   
     }
@@ -33,5 +37,12 @@ export class LoginformComponent implements OnInit {
   
     }
   }
+
+@Output() loginHide = new EventEmitter<boolean>();
+setLoginHidden()
+{
+  this.loginHide.emit(false);
+}
+
 
 }

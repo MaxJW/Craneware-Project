@@ -18,6 +18,7 @@ import { AdminLoginComponent } from './admin-login/admin-login.component';
 import { LoginformComponent } from './loginform/loginform.component';
 import {MatCardModule} from '@angular/material/card';
 import { AddConditionComponent } from './add-condition/add-condition.component';
+import {MatSelectModule} from '@angular/material/select';
 
 @NgModule({
   declarations: [
