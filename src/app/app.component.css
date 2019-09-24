@@ -14,7 +14,8 @@
     z-index: -99;
 }
 
-.main {
+.main,
+.notAdmin {
     position: relative;
     min-height: 100vh;
     display: flex;

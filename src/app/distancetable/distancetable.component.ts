@@ -22,6 +22,13 @@ export class DistancetableComponent implements OnInit{
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
 
   ngOnInit(){
+  }
+  
+  ngOnDestroy() {
+    this.distanceDataSub.unsubscribe();
+  }
+
+  ngAfterViewInit() {
     console.log(this.dataService.getDistanceData());
     this.dataSource.data = this.dataService.getDistanceData();
     this.distanceDataSub = this.dataService.getDistanceDataUpdateListener()
@@ -31,10 +38,6 @@ export class DistancetableComponent implements OnInit{
       });
     this.dataSource.sort = this.sort;
     this.dataSource.paginator = this.paginator;
-  }
-  
-  ngOnDestroy() {
-    this.distanceDataSub.unsubscribe();
   }
 }
 
