@@ -3,7 +3,7 @@ import { NgModule } from '@angular/core';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { MatTableModule, MatAutocompleteModule, MatFormFieldModule, MatInputModule, MatButtonModule, MatPaginatorModule, MatSortModule} from '@angular/material';
+import { MatTableModule, MatAutocompleteModule, MatFormFieldModule, MatInputModule, MatButtonModule, MatPaginatorModule, MatSortModule, MatSelectModule, MatCardModule} from '@angular/material';
 import { NgxLoadingModule, ngxLoadingAnimationTypes  } from 'ngx-loading';
 import { KeyboardShortcutsModule } from "ng-keyboard-shortcuts";
 import { AppRoutingModule } from './app-routing.module';
@@ -14,6 +14,7 @@ import { MapviewComponent } from './mapview/mapview.component';
 import { TableviewComponent } from './tableview/tableview.component';
 import { DistancetableComponent } from './distancetable/distancetable.component';
 import { AdminLoginComponent } from './admin-login/admin-login.component';
+import { LoginformComponent } from './loginform/loginform.component';
 
 @NgModule({
   declarations: [
@@ -22,7 +23,8 @@ import { AdminLoginComponent } from './admin-login/admin-login.component';
     MapviewComponent,
     TableviewComponent,
     DistancetableComponent,
-    AdminLoginComponent
+    AdminLoginComponent,
+    LoginformComponent
   ],
   imports: [
     BrowserModule,
@@ -31,11 +33,13 @@ import { AdminLoginComponent } from './admin-login/admin-login.component';
     ReactiveFormsModule,
     MatTableModule,
     MatSortModule,
+    MatCardModule,
     MatAutocompleteModule,
     MatPaginatorModule,
     MatFormFieldModule,
     MatInputModule,
     MatButtonModule,
+    MatSelectModule,
     HttpClientModule,
     AppRoutingModule,
     KeyboardShortcutsModule,
