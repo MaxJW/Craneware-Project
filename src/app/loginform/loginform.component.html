@@ -1,7 +1,10 @@
+<div class="main">
+  <app-add-condition *ngIf="passwordCorrect"></app-add-condition>
+</div>
 <mat-card class="adminloginform">
-
+  
   <mat-card-header>
-    <mat-card-title>Admin Login</mat-card-title>
+    <mat-card-title>Login</mat-card-title>
   </mat-card-header>
 
   <mat-card-content>
@@ -11,7 +14,8 @@
         <tr>
           <td>
             <mat-form-field appearance="outline">
-              <input matInput placeholder="Username" [(ngModel)]="username" name="username" aria-label="username" required>
+              <mat-label>Username</mat-label>
+              <input matInput [(ngModel)]="username" name="username" aria-label="username" required>
             </mat-form-field>
           </td>
         </tr>
@@ -19,7 +23,8 @@
         <tr>
           <td>
             <mat-form-field appearance="outline">
-              <input matInput placeholder="Password" [(ngModel)]="password" type="password" name="password" aria-label="password" required>
+              <mat-label>Password</mat-label>
+              <input matInput [(ngModel)]="password" type="password" name="password" aria-label="password" required>
             </mat-form-field>
           </td>
         </tr>

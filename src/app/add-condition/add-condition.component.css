@@ -1,0 +1,13 @@
+.menu-form-wrapper .mat-menu-content:not(:empty) {
+    padding: 0;
+  }
+  
+  .menu-form-wrapper .menu-form {
+    display: flex;
+    flex-direction: column;
+    padding: 24px;
+  }
+
+.mat-button {
+    background-color: whitesmoke;
+}  

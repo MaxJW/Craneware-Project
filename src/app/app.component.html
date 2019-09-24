@@ -7,6 +7,7 @@
         <app-mapview *ngIf="hasSearched" [@slideIn]></app-mapview>
         <app-tableview (mapSelection)="mapSelected($event)" *ngIf="hasSearched" [@slideIn]></app-tableview>
         <app-distancetable *ngIf="hasSearched" [@slideIn]></app-distancetable>
+        <app-add-condition></app-add-condition>
     </span>
     <app-loginform *ngIf="loginform"></app-loginform>
 </div>

@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-loginform',
@@ -7,7 +8,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class LoginformComponent implements OnInit {
 
-  constructor() { }
+  constructor(private snackBar: MatSnackBar) { }
 
   username: string;
   password: string;
@@ -22,12 +23,13 @@ export class LoginformComponent implements OnInit {
     {
   
      /** Navigate To Page After Login Page */
+     
   
     }
     else 
     {
   
-      alert("Error: Invalid Login");
+      this.snackBar.open("Invalid Login", "Dismiss")
   
     }
   }
