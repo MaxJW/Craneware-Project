@@ -17,7 +17,7 @@ import { DistancetableComponent } from './distancetable/distancetable.component'
 import { AdminLoginComponent } from './admin-login/admin-login.component';
 import { LoginformComponent } from './loginform/loginform.component';
 import {MatCardModule} from '@angular/material/card';
-import { AddConditionComponent } from './add-condition/add-condition.component'; 
+import { AddConditionComponent } from './add-condition/add-condition.component';
 
 @NgModule({
   declarations: [
@@ -45,6 +45,7 @@ import { AddConditionComponent } from './add-condition/add-condition.component';
     MatFormFieldModule,
     MatInputModule,
     MatButtonModule,
+    MatSelectModule,
     HttpClientModule,
     AppRoutingModule,
     KeyboardShortcutsModule,

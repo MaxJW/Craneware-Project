@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild, Output, EventEmitter } from '@angular/core';
 import { MatSort, MatPaginator } from '@angular/material';
-import {MatTableDataSource} from '@angular/material/table';
+import { MatTableDataSource } from '@angular/material/table';
 import { Subscription } from 'rxjs';
 
 import { DataService } from '../data.service';
@@ -11,25 +11,18 @@ import { DataService } from '../data.service';
   styleUrls: ['./distancetable.component.css']
 })
 
-export class DistancetableComponent implements OnInit{
+export class DistancetableComponent implements OnInit {
   distanceData;
+  isLoaded: boolean = false;
   private distanceDataSub: Subscription;
   constructor(public dataService: DataService) { }
 
   displayedColumns: string[] = ['providerId', 'providerName', 'from', 'to', 'distance', 'duration'];
   dataSource = new MatTableDataSource(this.dataService.getDistanceData());
-  @ViewChild(MatSort, {static: true}) sort: MatSort;
-  @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
+  @ViewChild(MatSort, { static: true }) sort: MatSort;
+  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
 
-  ngOnInit(){
-  }
-  
-  ngOnDestroy() {
-    this.distanceDataSub.unsubscribe();
-  }
-
-  ngAfterViewInit() {
-    console.log(this.dataService.getDistanceData());
+  ngOnInit() {
     this.dataSource.data = this.dataService.getDistanceData();
     this.distanceDataSub = this.dataService.getDistanceDataUpdateListener()
       .subscribe((distanceData) => {
@@ -38,6 +31,10 @@ export class DistancetableComponent implements OnInit{
       });
     this.dataSource.sort = this.sort;
     this.dataSource.paginator = this.paginator;
+  }
+
+  ngOnDestroy() {
+    this.distanceDataSub.unsubscribe();
   }
 }
 
