@@ -1,0 +1,18 @@
+:host {
+    width: 80%;
+    margin: 20px;
+}
+
+.border {
+    background-color: white;
+    box-shadow: 0px 3px 15px rgba(0, 0, 0, 0.2);
+    padding: 10px;
+    border-radius: 4px;
+    height: 400px;
+}
+
+@media only screen and (max-width: 768px) {
+     :host {
+        width: 95%;
+    }
+}

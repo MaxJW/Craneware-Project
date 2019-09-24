@@ -43,20 +43,6 @@ export class MapviewComponent implements OnInit {
     this.searchDataSub.unsubscribe();
   }
 
-  createMarker(place: any) {
-    var marker = new google.maps.Marker({
-      map: this.map,
-      position: place.geometry.location,
-      title: place.name
-    });
-
-    var self = this;
-    google.maps.event.addListener(marker, 'click', function () {
-      self.infowindow.setContent(place.name);
-      self.infowindow.open(self.map, this);
-    });
-  }
-
   async initMap() {
     const mapProperties = {
       center: new google.maps.LatLng(39.833333, -98.583333),
@@ -69,8 +55,49 @@ export class MapviewComponent implements OnInit {
     this.infowindow = new google.maps.InfoWindow();
     this.service = new google.maps.places.PlacesService(this.map);
 
+
     var self = this;
 
+    //Get user location
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(function (position) {
+        var pos = {
+          lat: position.coords.latitude,
+          lng: position.coords.longitude
+        };
+
+        var image = {
+          url: 'https://i.imgur.com/CHjBsrd.png',
+          // This marker is 20 pixels wide by 32 pixels high.
+          size: new google.maps.Size(30, 30),
+          // The origin for this image is (0, 0).
+          origin: new google.maps.Point(0, 0),
+          // The anchor for this image is the base of the flagpole at (0, 32).
+          anchor: new google.maps.Point(15, 15)
+        };
+
+        var curr_location = new google.maps.Marker({
+          map: self.map,
+          position: new google.maps.LatLng(pos.lat, pos.lng),
+          title: "Current Location",
+          icon: image,
+        });
+        
+        google.maps.event.addListener(curr_location, 'click', function () {
+          self.infowindow.setContent("Current Location");
+          self.infowindow.open(self.map, this);
+        });
+        
+        self.map.setCenter(new google.maps.LatLng(pos.lat, pos.lng));
+      }, function () {
+        self.handleLocationError(true, self.infowindow, self.map.getCenter());
+      });
+    } else {
+      // Browser doesn't support Geolocation
+      this.handleLocationError(false, this.infowindow, this.map.getCenter());
+    }
+
+    //Search for first three received hospitals and place markers on map
     var request;
     var myquery;
     var resultstoget = 3;
@@ -89,8 +116,31 @@ export class MapviewComponent implements OnInit {
     self.dataService.setDistanceData(self.distances);
   }
 
+  createMarker(place: any) {
+    var marker = new google.maps.Marker({
+      map: this.map,
+      position: place.geometry.location,
+      title: place.name,
+      animation: google.maps.Animation.DROP,
+    });
+
+    var self = this;
+    google.maps.event.addListener(marker, 'click', function () {
+      self.infowindow.setContent(place.name);
+      self.infowindow.open(self.map, this);
+    });
+  }
+
   centerMapPlease(data) {
     console.log("Centering!", data)
+  }
+
+  handleLocationError(browserHasGeolocation, infoWindow, pos) {
+    infoWindow.setPosition(pos);
+    infoWindow.setContent(browserHasGeolocation ?
+      'Error: The Geolocation service failed.' :
+      'Error: Your browser doesn\'t support geolocation.');
+    infoWindow.open(this.map);
   }
 
   findPlaceFromQuery(request, resultstoget, loop) {
@@ -103,7 +153,6 @@ export class MapviewComponent implements OnInit {
           await self.calculateDistance(results[i], self.searchData[loop].providerId, self.searchData[loop].providerName);
           //console.log(await self.calculateDistance(results[i], self.searchData[loop].providerId));
         }
-        self.map.setCenter(results[0].geometry.location);
       }
     });
   }
