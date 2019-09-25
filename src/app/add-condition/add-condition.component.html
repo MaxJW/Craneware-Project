@@ -8,11 +8,19 @@
     </mat-panel-description>
   </mat-expansion-panel-header>
   <form [formGroup]="addConditionForm" (ngSubmit)="onSubmit(addConditionForm.value)">
+      <mat-form-field>
+          <input type="text" id="one" class="search-input" placeholder="Find Current Conditions" aria-label="Number" matInput [formControl]="myControl" [matAutocomplete]="auto">
+          <mat-autocomplete #auto="matAutocomplete">
+              <mat-option *ngFor="let option of filteredOptions | async" [value]="option" (click)="clicked()">
+                  {{option}}
+              </mat-option>
+          </mat-autocomplete>
+      </mat-form-field>
     <mat-form-field>
-      <input matInput placeholder="drgCode" id="drgCode" type="text" formControlName="drgCode" required>
+      <input matInput placeholder="drgCode" id="two" type="text" formControlName="drgCode" autocomplete="on" required>
     </mat-form-field>
     <mat-form-field>
-      <input matInput placeholder="drgDefinition" id="drgDefinition" type="text" formControlName="drgDefinition" required>
+      <input matInput placeholder="drgDefinition" id="three" type="text" formControlName="drgDefinition" autocomplete="on" required>
     </mat-form-field>
     <mat-form-field>
       <input matInput placeholder="Provider ID" id="providerId" type="text" formControlName="providerId" required>
@@ -22,6 +30,33 @@
     </mat-form-field>
     <mat-form-field>
       <input matInput placeholder="Provider Street Address" id="providerStreetAddress" type="text" formControlName="providerStreetAddress" required>
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput placeholder="Provider City" id="providerCity" type="text" formControlName="providerCity" required>
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput placeholder="Provider State" id="providerState" type="text" formControlName="providerState" required>
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput placeholder="Provider Zip Code" id="providerZipCode" type="text" formControlName="providerZipCode" required>
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput placeholder="Hospital Referral Region HRR Description" id="hospitalReferralRegionHRRDescription" type="text" formControlName="hospitalReferralRegionHRRDescription" required>
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput placeholder="Total Discharges" id="totalDischarges" type="text" formControlName="totalDischarges" required>
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput placeholder="Average Covered Charges" id="averageCoveredCharges" type="text" formControlName="averageCoveredCharges" required>
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput placeholder="Average Total Payments" id="averageTotalPayments" type="text" formControlName="averageTotalPayments" required>
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput placeholder="Average Medicare Payments" id="averageMedicarePayments" type="text" formControlName="averageMedicarePayments" required>
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput placeholder="Year" id="year" type="text" formControlName="year" required>
     </mat-form-field>
       <button mat-button class="button" type="submit">Submit</button>
   </form>
