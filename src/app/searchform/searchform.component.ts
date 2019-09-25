@@ -3,21 +3,13 @@ import { FormControl, Validators, NgModel, FormGroup } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
 import { format } from 'util';
-import { trigger, state, transition, animate, style, keyframes } from '@angular/animations';
 import { HttpService } from '../http.service';
 
 @Component({
   selector: 'app-searchform',
   templateUrl: './searchform.component.html',
   styleUrls: ['./searchform.component.css'],
-  animations: [
-    trigger('slideIn', [
-      transition(':enter', [
-        style({transform: 'translateY(-80%)'}),
-        animate('80ms ease-in', style({transform: 'translateY(0%)'}))
-      ])
-    ]),
-  ]
+  animations: []
 })
 export class SearchformComponent implements OnInit {
   haha: boolean = true;

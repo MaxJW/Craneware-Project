@@ -9,14 +9,14 @@
                             {{option}}
                         </mat-option>
                     </mat-autocomplete>
+                    <mat-error *ngIf="error == 'exist'">
+                        Please select an option from the list provided
+                    </mat-error>
+                    <mat-error *ngIf="error == 'error'"> Please enter your condition or DRG Code
+                    </mat-error>
                 </mat-form-field>
 
-                <mat-error *ngIf="error == 'exist'" [@slideIn]>
-                    Please select an option from the list provided
-                </mat-error>
-                <mat-error *ngIf="error == 'error'" [@slideIn]>
-                    Please enter your condition or DRG Code
-                </mat-error>
+
             </div>
             <div class="search-options">
                 <mat-form-field>
@@ -43,10 +43,12 @@
                         <mat-option value="option1">⭐4</mat-option>
                     </mat-select>
                 </mat-form-field>
+
+                <button mat-stroked-button type="button"><i class="material-icons">my_location</i></button>
             </div>
         </div>
         <div class="search-button">
-            <button mat-button class="blue-button">Enter</button>
+            <button mat-raised-button class="blue-button">Enter</button>
         </div>
         <!-- FILTERS
         //distance
