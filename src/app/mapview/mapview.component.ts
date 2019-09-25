@@ -138,9 +138,11 @@ export class MapviewComponent implements OnInit {
     var self = this;
     google.maps.event.addListener(marker, 'click', function () {
       self.infowindow.setContent(
-        `<h4>` + self.searchData[result].providerName + `</h2>` + 
-        `<p><b>Price: </b>` + self.searchData[result].averageTotalPayments + `</p>` + 
-        `<p><b>Distance: </b>` + self.distanceData[result].distance + `</p>`
+        `<div class="infowindow_content">` + 
+        `<h3>` + self.searchData[result].providerName + `</h3><hr style="margin: 4px 0"/>` + 
+        `<p style="font-size: 0.9rem"><b>Price: </b>` + self.searchData[result].averageTotalPayments + `</p>` + 
+        `<p style="font-size: 0.9rem"><b>Distance: </b>` + self.distanceData[result].distance + `</p>` + 
+        `</div>`
       );
       self.infowindow.open(self.map, this);
     });
