@@ -1,0 +1,12 @@
+:host {
+  width: 95%;
+  padding-top: 50px;
+}
+
+mat-form-field {
+  width: 100%;
+}
+
+.button {
+  background-color: rgb(94, 187, 94);
+}

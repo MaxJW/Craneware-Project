@@ -1,0 +1,29 @@
+<mat-expansion-panel>
+  <mat-expansion-panel-header>
+    <mat-panel-title>
+      <b>Add new condition</b>
+    </mat-panel-title>
+    <mat-panel-description>
+      ...
+    </mat-panel-description>
+  </mat-expansion-panel-header>
+  <form [formGroup]="addConditionForm" (ngSubmit)="onSubmit(addConditionForm.value)">
+    <mat-form-field>
+      <input matInput placeholder="drgCode" id="drgCode" type="text" formControlName="drgCode" required>
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput placeholder="drgDefinition" id="drgDefinition" type="text" formControlName="drgDefinition" required>
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput placeholder="Provider ID" id="providerId" type="text" formControlName="providerId" required>
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput placeholder="Provider Name" id="providerName" type="text" formControlName="providerName" required>
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput placeholder="Provider Street Address" id="providerStreetAddress" type="text" formControlName="providerStreetAddress" required>
+    </mat-form-field>
+      <button mat-button class="button" type="submit">Submit</button>
+  </form>
+</mat-expansion-panel>
+
