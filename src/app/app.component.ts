@@ -1,6 +1,7 @@
 import { Component, ViewChild } from '@angular/core';
 import { trigger, state, transition, animate, style } from '@angular/animations';
 import { ShortcutInput, ShortcutEventOutput } from 'ng-keyboard-shortcuts';
+import { MapviewComponent } from './mapview/mapview.component';
 
 @Component({
   selector: 'app-root',
@@ -22,6 +23,7 @@ import { ShortcutInput, ShortcutEventOutput } from 'ng-keyboard-shortcuts';
   ]
 })
 export class AppComponent {
+  geotoggleVal: boolean;
   hasSearched: boolean = false;
   loginform: boolean = false;
   loginSuccess: boolean = false;
@@ -39,6 +41,10 @@ export class AppComponent {
   loginHider(val: boolean)
   {
     this.loginSuccess = val;
+  }
+
+  geolocationEnabled(val: boolean) {
+      this.geotoggleVal = val;
   }
 
   ngAfterViewInit()

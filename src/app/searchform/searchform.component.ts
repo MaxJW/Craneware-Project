@@ -12,7 +12,7 @@ import { HttpService } from '../http.service';
   animations: []
 })
 export class SearchformComponent implements OnInit {
-  haha: boolean = true;
+  isChecked: boolean;
   error: string = 'false';
   //public data: any;
   myControl = new FormControl('', Validators.required);
@@ -818,6 +818,7 @@ export class SearchformComponent implements OnInit {
         startWith(''),
         map(value => this._filter(value))
       );
+      console.log(this.myControl.value);
   }
 
   private _filter(value: string): string[] {
@@ -829,5 +830,10 @@ export class SearchformComponent implements OnInit {
   @Output() searchToggle = new EventEmitter<boolean>();
   setSearched() {
       this.searchToggle.emit(true);
+  }
+
+  @Output() geolocationToggle = new EventEmitter<boolean>();
+  geoToggleChange(toggle) {
+    this.geolocationToggle.emit(toggle.checked);
   }
 }

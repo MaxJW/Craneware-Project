@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, Input } from '@angular/core';
 import { } from 'googlemaps';
 import { Subscription } from 'rxjs';
 
@@ -19,6 +19,7 @@ export class MapviewComponent implements OnInit {
   map: google.maps.Map;
   service: google.maps.places.PlacesService;
   infowindow: google.maps.InfoWindow;
+  @Input() geotoggleEnabled;
 
   //Database get
   searchData;
@@ -30,6 +31,7 @@ export class MapviewComponent implements OnInit {
   pos = { lat: 0, lng: 0 };
 
   ngOnInit(): void {
+
     //Get data into searchData
     this.searchData = this.dataService.getSearchData();
     this.searchDataSub = this.dataService.getSearchDataUpdateListener()
@@ -56,7 +58,7 @@ export class MapviewComponent implements OnInit {
   async initMap() {
     const mapProperties = {
       center: new google.maps.LatLng(39.833333, -98.583333),
-      zoom: 5,
+      zoom: 4,
       streetViewControl: false,
       mapTypeId: google.maps.MapTypeId.ROADMAP,
     };
@@ -91,39 +93,41 @@ export class MapviewComponent implements OnInit {
     var self = this;
 
     //Get user location
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(function (position) {
-        self.pos = {
-          lat: position.coords.latitude,
-          lng: position.coords.longitude
-        };
+    if (this.geotoggleEnabled) {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(function (position) {
+          self.pos = {
+            lat: position.coords.latitude,
+            lng: position.coords.longitude
+          };
 
-        var image = {
-          url: 'https://i.imgur.com/CHjBsrd.png',
-          size: new google.maps.Size(30, 30),
-          origin: new google.maps.Point(0, 0),
-          anchor: new google.maps.Point(15, 15)
-        };
+          var image = {
+            url: 'https://i.imgur.com/CHjBsrd.png',
+            size: new google.maps.Size(30, 30),
+            origin: new google.maps.Point(0, 0),
+            anchor: new google.maps.Point(15, 15)
+          };
 
-        var curr_location = new google.maps.Marker({
-          map: self.map,
-          position: new google.maps.LatLng(self.pos.lat, self.pos.lng),
-          title: "Current Location",
-          icon: image,
+          var curr_location = new google.maps.Marker({
+            map: self.map,
+            position: new google.maps.LatLng(self.pos.lat, self.pos.lng),
+            title: "Current Location",
+            icon: image,
+          });
+
+          google.maps.event.addListener(curr_location, 'click', function () {
+            self.infowindow.setContent("Current Location");
+            self.infowindow.open(self.map, this);
+          });
+
+          self.map.setCenter(new google.maps.LatLng(self.pos.lat, self.pos.lng));
+        }, function () {
+          self.handleLocationError(true, self.infowindow, self.map.getCenter());
         });
-
-        google.maps.event.addListener(curr_location, 'click', function () {
-          self.infowindow.setContent("Current Location");
-          self.infowindow.open(self.map, this);
-        });
-
-        self.map.setCenter(new google.maps.LatLng(self.pos.lat, self.pos.lng));
-      }, function () {
-        self.handleLocationError(true, self.infowindow, self.map.getCenter());
-      });
-    } else {
-      // Browser doesn't support Geolocation
-      this.handleLocationError(false, this.infowindow, this.map.getCenter());
+      } else {
+        // Browser doesn't support Geolocation
+        this.handleLocationError(false, this.infowindow, this.map.getCenter());
+      }
     }
   }
 
@@ -138,10 +142,10 @@ export class MapviewComponent implements OnInit {
     var self = this;
     google.maps.event.addListener(marker, 'click', function () {
       self.infowindow.setContent(
-        `<div class="infowindow_content">` + 
-        `<h3>` + self.searchData[result].providerName + `</h3><hr style="margin: 4px 0"/>` + 
-        `<p style="font-size: 0.9rem"><b>Price: </b>` + self.searchData[result].averageTotalPayments + `</p>` + 
-        `<p style="font-size: 0.9rem"><b>Distance: </b>` + self.distanceData[result].distance + `</p>` + 
+        `<div class="infowindow_content">` +
+        `<h3>` + self.searchData[result].providerName + `</h3><hr style="margin: 4px 0"/>` +
+        `<p style="font-size: 0.9rem"><b>Price: </b>` + self.searchData[result].averageTotalPayments + `</p>` +
+        `<p style="font-size: 0.9rem"><b>Distance: </b>` + self.distanceData[result].distance + `</p>` +
         `</div>`
       );
       self.infowindow.open(self.map, this);
