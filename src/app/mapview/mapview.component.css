@@ -18,8 +18,8 @@
     border-radius: 4px;
 }
 
-@media only screen and (max-width: 768px) {
-    :host {
+@media only screen and (max-width: 876px) {
+     :host {
         width: 95%;
     }
 }
