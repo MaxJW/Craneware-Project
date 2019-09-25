@@ -22,9 +22,12 @@ export class MapviewComponent implements OnInit {
 
   //Database get
   searchData;
+  distanceData;
   private searchDataSub: Subscription;
+  private distanceDataSub: Subscription;
   constructor(public dataService: DataService) { }
   distances = [];
+  pos = { lat: 0, lng: 0 };
 
   ngOnInit(): void {
     //Get data into searchData
@@ -36,6 +39,13 @@ export class MapviewComponent implements OnInit {
         this.initMap();
       });
     console.log(this.searchData);
+
+    this.distanceData = this.dataService.getDistanceData();
+    this.distanceDataSub = this.dataService.getDistanceDataUpdateListener()
+      .subscribe((distanceData) => {
+        this.distanceData = distanceData;
+      });
+
     this.initMap();
   }
 
@@ -55,52 +65,13 @@ export class MapviewComponent implements OnInit {
     this.infowindow = new google.maps.InfoWindow();
     this.service = new google.maps.places.PlacesService(this.map);
 
+    this.createGeolocationMarker();
 
     var self = this;
-
-    //Get user location
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(function (position) {
-        var pos = {
-          lat: position.coords.latitude,
-          lng: position.coords.longitude
-        };
-
-        var image = {
-          url: 'https://i.imgur.com/CHjBsrd.png',
-          // This marker is 20 pixels wide by 32 pixels high.
-          size: new google.maps.Size(30, 30),
-          // The origin for this image is (0, 0).
-          origin: new google.maps.Point(0, 0),
-          // The anchor for this image is the base of the flagpole at (0, 32).
-          anchor: new google.maps.Point(15, 15)
-        };
-
-        var curr_location = new google.maps.Marker({
-          map: self.map,
-          position: new google.maps.LatLng(pos.lat, pos.lng),
-          title: "Current Location",
-          icon: image,
-        });
-        
-        google.maps.event.addListener(curr_location, 'click', function () {
-          self.infowindow.setContent("Current Location");
-          self.infowindow.open(self.map, this);
-        });
-        
-        self.map.setCenter(new google.maps.LatLng(pos.lat, pos.lng));
-      }, function () {
-        self.handleLocationError(true, self.infowindow, self.map.getCenter());
-      });
-    } else {
-      // Browser doesn't support Geolocation
-      this.handleLocationError(false, this.infowindow, this.map.getCenter());
-    }
-
     //Search for first three received hospitals and place markers on map
     var request;
     var myquery;
-    var resultstoget = 3;
+    var resultstoget = 3; // !!!!!!! RESULTS TO GET VALUE !!!!!!!!!
     self.distances = [];
     for (var loop = 0; loop < resultstoget; loop++) {
       console.log(self.searchData[loop].providerName);
@@ -116,17 +87,60 @@ export class MapviewComponent implements OnInit {
     self.dataService.setDistanceData(self.distances);
   }
 
-  createMarker(place: any) {
+  createGeolocationMarker() {
+    var self = this;
+
+    //Get user location
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(function (position) {
+        self.pos = {
+          lat: position.coords.latitude,
+          lng: position.coords.longitude
+        };
+
+        var image = {
+          url: 'https://i.imgur.com/CHjBsrd.png',
+          size: new google.maps.Size(30, 30),
+          origin: new google.maps.Point(0, 0),
+          anchor: new google.maps.Point(15, 15)
+        };
+
+        var curr_location = new google.maps.Marker({
+          map: self.map,
+          position: new google.maps.LatLng(self.pos.lat, self.pos.lng),
+          title: "Current Location",
+          icon: image,
+        });
+
+        google.maps.event.addListener(curr_location, 'click', function () {
+          self.infowindow.setContent("Current Location");
+          self.infowindow.open(self.map, this);
+        });
+
+        self.map.setCenter(new google.maps.LatLng(self.pos.lat, self.pos.lng));
+      }, function () {
+        self.handleLocationError(true, self.infowindow, self.map.getCenter());
+      });
+    } else {
+      // Browser doesn't support Geolocation
+      this.handleLocationError(false, this.infowindow, this.map.getCenter());
+    }
+  }
+
+  createMarker(place: any, result: any) {
     var marker = new google.maps.Marker({
       map: this.map,
       position: place.geometry.location,
       title: place.name,
       animation: google.maps.Animation.DROP,
     });
-
+    console.log(this.searchData);
     var self = this;
     google.maps.event.addListener(marker, 'click', function () {
-      self.infowindow.setContent(place.name);
+      self.infowindow.setContent(
+        `<h2>` + self.searchData[result].providerName + `</h2>
+        <p><b>Price: </b>` + self.searchData[result].averageTotalPayments + `</p>`
+      );
       self.infowindow.open(self.map, this);
     });
   }
@@ -149,7 +163,7 @@ export class MapviewComponent implements OnInit {
       if (status === google.maps.places.PlacesServiceStatus.OK) {
         for (var i = 0; i < results.length; i++) {
           //console.log(results[i]);
-          self.createMarker(results[i]);
+          self.createMarker(results[i], loop);
           await self.calculateDistance(results[i], self.searchData[loop].providerId, self.searchData[loop].providerName);
           //console.log(await self.calculateDistance(results[i], self.searchData[loop].providerId));
         }
@@ -159,12 +173,12 @@ export class MapviewComponent implements OnInit {
 
   async calculateDistance(location, providerId, providerName) {
     var selectedHospitals = this.dataService.getSearchData();
-    var currentLocation = ['Fike Park, Colby, KS 67701'];
+    var currentLocation = this.pos;
 
     let service = new google.maps.DistanceMatrixService();
     await service.getDistanceMatrix(
       {
-        origins: currentLocation,
+        origins: [currentLocation],
         destinations: [location.geometry.location],
         travelMode: google.maps.TravelMode.DRIVING,
         unitSystem: google.maps.UnitSystem.IMPERIAL,

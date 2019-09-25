@@ -15,34 +15,21 @@ export class LoginformComponent implements OnInit {
   passwordCorrect: boolean = false;
   loginform: boolean;
 
-  ngOnInit() 
-  {}
+  ngOnInit() { }
 
-  login() : void 
-  {
-
-    if(this.username == 'Administrator' && this.password == 'hackerman0451')
-    {
-  
-     /** Navigate To Page After Login Page */
-     this.passwordCorrect =true;
-     this.setLoginHidden();
-     
-  
+  login(): void {
+    if (this.username == 'Administrator' && this.password == 'hackerman0451') {
+      /** Navigate To Page After Login Page */
+      this.passwordCorrect = true;
+      this.setLoginHidden();
     }
-    else 
-    {
-  
+    else {
       this.snackBar.open("Invalid Login", "Dismiss")
-  
     }
   }
 
-@Output() loginHide = new EventEmitter<boolean>();
-setLoginHidden()
-{
-  this.loginHide.emit(true);
-}
-
-
+  @Output() loginHide = new EventEmitter<boolean>();
+  setLoginHidden() {
+    this.loginHide.emit(true);
+  }
 }
