@@ -52,6 +52,9 @@
                     </mat-select>
                 </mat-form-field>
 
+                <mat-form-field *ngIf="!isChecked">
+                    <input type="text" placeholder="Zip Code" aria-label="Number" matInput>
+                </mat-form-field>
                 <mat-slide-toggle color="primary" (change)="geoToggleChange($event)"><i class="material-icons">my_location</i></mat-slide-toggle>
             </div>
         </div>

@@ -834,6 +834,7 @@ export class SearchformComponent implements OnInit {
 
   @Output() geolocationToggle = new EventEmitter<boolean>();
   geoToggleChange(toggle) {
-    this.geolocationToggle.emit(toggle.checked);
+    this.isChecked = toggle.checked;
+    this.geolocationToggle.emit(this.isChecked);
   }
 }
