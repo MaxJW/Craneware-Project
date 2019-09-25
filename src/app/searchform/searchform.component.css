@@ -58,10 +58,33 @@ mat-form-field {
 
 .search-input {
     font-size: 1.2rem;
+    width: 100%;
 }
 
 @media only screen and (max-width: 768px) {
      :host {
         width: 95%;
+    }
+}
+
+@media only screen and (max-width: 876px) {
+    form,
+    .main-search,
+    .search-options,
+    .search-button,
+    .search {
+        display: block;
+    }
+    .blue-button {
+        float: none;
+    }
+    .main-search {
+        width: 100%;
+    }
+    mat-form-field {
+        width: 80%;
+    }
+    .search-options {
+        margin-bottom: 10px;
     }
 }
