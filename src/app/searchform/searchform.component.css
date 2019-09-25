@@ -23,6 +23,11 @@ form,
     display: flex;
 }
 
+.search-options {
+    justify-content: center;
+    align-items: center;
+}
+
 .main-search mat-form-field,
 .search-options mat-form-field,
 .search-button {
@@ -61,13 +66,10 @@ mat-form-field {
     width: 100%;
 }
 
-@media only screen and (max-width: 768px) {
+@media only screen and (max-width: 876px) {
      :host {
         width: 95%;
     }
-}
-
-@media only screen and (max-width: 876px) {
     form,
     .main-search,
     .search-options,
@@ -82,7 +84,7 @@ mat-form-field {
         width: 100%;
     }
     mat-form-field {
-        width: 80%;
+        width: 95%;
     }
     .search-options {
         margin-bottom: 10px;
