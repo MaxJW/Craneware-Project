@@ -134,12 +134,13 @@ export class MapviewComponent implements OnInit {
       title: place.name,
       animation: google.maps.Animation.DROP,
     });
-    console.log(this.searchData);
+    console.log(this.distanceData);
     var self = this;
     google.maps.event.addListener(marker, 'click', function () {
       self.infowindow.setContent(
-        `<h2>` + self.searchData[result].providerName + `</h2>
-        <p><b>Price: </b>` + self.searchData[result].averageTotalPayments + `</p>`
+        `<h4>` + self.searchData[result].providerName + `</h2>` + 
+        `<p><b>Price: </b>` + self.searchData[result].averageTotalPayments + `</p>` + 
+        `<p><b>Distance: </b>` + self.distanceData[result].distance + `</p>`
       );
       self.infowindow.open(self.map, this);
     });
