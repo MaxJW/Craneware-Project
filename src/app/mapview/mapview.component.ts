@@ -121,6 +121,7 @@ export class MapviewComponent implements OnInit {
           });
 
           self.map.setCenter(new google.maps.LatLng(self.pos.lat, self.pos.lng));
+          self.map.setZoom(6);
         }, function () {
           self.handleLocationError(true, self.infowindow, self.map.getCenter());
         });
