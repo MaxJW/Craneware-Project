@@ -41,7 +41,7 @@ export class LoginformComponent implements OnInit {
 @Output() loginHide = new EventEmitter<boolean>();
 setLoginHidden()
 {
-  this.loginHide.emit(false);
+  this.loginHide.emit(true);
 }
 
 

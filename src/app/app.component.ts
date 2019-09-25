@@ -24,6 +24,7 @@ import { ShortcutInput, ShortcutEventOutput } from 'ng-keyboard-shortcuts';
 export class AppComponent {
   hasSearched: boolean = false;
   loginform: boolean = false;
+  loginSuccess: boolean = false;
   mapSelect: any;
   shortcuts: ShortcutInput[] = [];
 
@@ -37,7 +38,7 @@ export class AppComponent {
 
   loginHider(val: boolean)
   {
-    this.loginform = val;
+    this.loginSuccess = val;
   }
 
   ngAfterViewInit()

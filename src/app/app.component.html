@@ -8,5 +8,8 @@
         <app-tableview (mapSelection)="mapSelected($event)" *ngIf="hasSearched" [@slideIn]></app-tableview>
         <app-distancetable *ngIf="hasSearched" [@slideIn]></app-distancetable>
     </span>
-    <app-loginform (loginHide)="loginHider($event)" *ngIf="loginform"></app-loginform>
+    <app-loginform (loginHide)="loginHider($event)" *ngIf="loginform && !loginSuccess"></app-loginform>
+    <span *ngIf="loginSuccess">
+        <app-add-condition></app-add-condition>
+    </span>
 </div>
