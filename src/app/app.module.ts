@@ -8,14 +8,12 @@ import { MatTableModule, MatAutocompleteModule, MatFormFieldModule, MatInputModu
 import { NgxLoadingModule, ngxLoadingAnimationTypes  } from 'ngx-loading';
 import { KeyboardShortcutsModule } from "ng-keyboard-shortcuts";
 import { MatSnackBarModule } from '@angular/material/snack-bar';
-import { AppRoutingModule } from './app-routing.module';
 
 import { AppComponent } from './app.component';
 import { SearchformComponent } from './searchform/searchform.component';
 import { MapviewComponent } from './mapview/mapview.component';
 import { TableviewComponent } from './tableview/tableview.component';
 import { DistancetableComponent } from './distancetable/distancetable.component';
-import { AdminLoginComponent } from './admin-login/admin-login.component';
 import { LoginformComponent } from './loginform/loginform.component';
 import {MatCardModule} from '@angular/material/card';
 import { AddConditionComponent } from './add-condition/add-condition.component';
@@ -28,7 +26,6 @@ import {MatSelectModule} from '@angular/material/select';
     MapviewComponent,
     TableviewComponent,
     DistancetableComponent,
-    AdminLoginComponent,
     LoginformComponent,
     AddConditionComponent
   ],
@@ -51,7 +48,6 @@ import {MatSelectModule} from '@angular/material/select';
     MatSelectModule,
     MatExpansionModule,
     HttpClientModule,
-    AppRoutingModule,
     KeyboardShortcutsModule,
     NgxLoadingModule.forRoot({
       animationType: ngxLoadingAnimationTypes.circleSwish,

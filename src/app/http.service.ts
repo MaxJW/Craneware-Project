@@ -2,11 +2,14 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 
 import { DataService } from './data.service';
+import { AddConditionComponent } from './add-condition/add-condition.component';
 
 @Injectable({providedIn: 'root'})
 export class HttpService{
   searchDrgUrl: string = 'http://104.248.165.91:8000/api/searchDRG';
   searchDrgLatestYearUrl: string = 'http://104.248.165.91:8000/api/searchDRGLatestYear';
+  //addNewCondition: string = 'http://104.248.165.91:8000/api/addNewCondition';
+  addNewCondition: string = 'http://localhost:8000/api/addNewCondition';
   getbaseUrl: string = 'http://104.248.165.91:8000/';
 
   public responce: any;
@@ -35,4 +38,9 @@ export class HttpService{
       .get(this.getbaseUrl).toPromise().then(res => console.log(res));
       // .subscribe(res => console.log(res));
   }
+
+  createCondition(data){
+    return this.http.post<any>(this.addNewCondition, data)
+  }
+
 }

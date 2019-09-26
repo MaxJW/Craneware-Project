@@ -102,3 +102,11 @@ app.post('/api/searchDRGLatestYear', async (req,res) => {
   client.close();
   res.send(LatestYearResult);
 });
+
+app.post('/api/addNewCondition', function(req,res){
+  const client = dbConnect();
+  client.then(function(db){
+    client.db(dbConfig.name).collection("DRG").insertOne(req.body);
+  });
+  res.send('Data received:\n' + JSON.stringify(req.body));
+})

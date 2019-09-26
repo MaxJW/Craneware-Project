@@ -70,6 +70,9 @@ mat-form-field {
      :host {
         width: 95%;
     }
+}
+
+@media only screen and (max-width: 1222px) {
     form,
     .main-search,
     .search-options,
