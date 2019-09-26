@@ -67,7 +67,6 @@ export class MapviewComponent implements OnInit {
     this.service = new google.maps.places.PlacesService(this.map);
 
     this.createGeolocationMarker();
-
     var self = this;
     //Search for first three received hospitals and place markers on map
     var request;
@@ -120,6 +119,7 @@ export class MapviewComponent implements OnInit {
 
           self.map.setCenter(new google.maps.LatLng(self.pos.lat, self.pos.lng));
           self.map.setZoom(6);
+          self.createRadius();
         }, function () {
           self.handleLocationError(true, self.infowindow, self.map.getCenter());
         });
@@ -128,6 +128,19 @@ export class MapviewComponent implements OnInit {
         this.handleLocationError(false, this.infowindow, this.map.getCenter());
       }
     }
+  }
+
+  createRadius() {
+    var geoCircle = new google.maps.Circle({
+      strokeColor: '#70B7FF',
+      strokeOpacity: 0.8,
+      strokeWeight: 2,
+      fillColor: '#70B7FF',
+      fillOpacity: 0.35,
+      map: this.map,
+      center: this.pos,
+      radius: 1609 * /*Get distance from search?*/100
+    });
   }
 
   createMarker(place: any, result: any) {
