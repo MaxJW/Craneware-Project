@@ -20,7 +20,7 @@ export class MapviewComponent implements OnInit {
   service: google.maps.places.PlacesService;
   infowindow: google.maps.InfoWindow;
   @Input() geotoggleEnabled;
-
+  counter: number = 0;
   //Database get
   searchData;
   distanceData;
@@ -76,7 +76,6 @@ export class MapviewComponent implements OnInit {
     var resultstoget = 3; // !!!!!!! RESULTS TO GET VALUE !!!!!!!!!
     self.distances = [];
     for (var loop = 0; loop < resultstoget; loop++) {
-      console.log(self.searchData[loop].providerName);
       myquery = this.searchData[loop].providerName + ", " + this.searchData[loop].providerStreetAddress + ", " + this.searchData[loop].providerCity + ", " + this.searchData[loop].providerState + " " + this.searchData[loop].providerZipCode;
       request = {
         query: myquery,
@@ -139,7 +138,8 @@ export class MapviewComponent implements OnInit {
       title: place.name,
       animation: google.maps.Animation.DROP,
     });
-    console.log(this.distanceData);
+    this.counter++;
+    console.log(this.counter);
     var self = this;
     google.maps.event.addListener(marker, 'click', function () {
       self.infowindow.setContent(
@@ -151,6 +151,7 @@ export class MapviewComponent implements OnInit {
       );
       self.infowindow.open(self.map, this);
     });
+
   }
 
   centerMapPlease(data) {
