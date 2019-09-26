@@ -40,7 +40,6 @@ export class MapviewComponent implements OnInit {
         console.log(this.searchData);
         this.initMap();
       });
-    console.log(this.searchData);
 
     this.distanceData = this.dataService.getDistanceData();
     this.distanceDataSub = this.dataService.getDistanceDataUpdateListener()
@@ -138,8 +137,10 @@ export class MapviewComponent implements OnInit {
       title: place.name,
       animation: google.maps.Animation.DROP,
     });
+
     this.counter++;
     console.log(this.counter);
+    
     var self = this;
     google.maps.event.addListener(marker, 'click', function () {
       self.infowindow.setContent(
@@ -151,7 +152,6 @@ export class MapviewComponent implements OnInit {
       );
       self.infowindow.open(self.map, this);
     });
-
   }
 
   centerMapPlease(data) {

@@ -12,7 +12,10 @@ import { HttpService } from '../http.service';
   animations: []
 })
 export class SearchformComponent implements OnInit {
-  geolocationChecked: boolean;
+  @Output() searchToggle = new EventEmitter<boolean>();
+  @Output() geolocationToggle = new EventEmitter<boolean>();
+
+  geolocationChecked: boolean = true;
   error: string = 'false';
   //public data: any;
   searchControl = new FormControl('', Validators.required);
@@ -841,6 +844,7 @@ export class SearchformComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.geolocationToggle.emit(true);
     this.filteredOptions = this.searchControl.valueChanges
       .pipe(
         startWith(''),
@@ -855,12 +859,10 @@ export class SearchformComponent implements OnInit {
     return this.options.filter(option => option.toLowerCase().includes(filterValue));
   }
 
-  @Output() searchToggle = new EventEmitter<boolean>();
   setSearched() {
     this.searchToggle.emit(true);
   }
 
-  @Output() geolocationToggle = new EventEmitter<boolean>();
   geoToggleChange(toggle) {
     this.geolocationChecked = toggle.checked;
     this.geolocationToggle.emit(this.geolocationChecked);

@@ -53,7 +53,7 @@
                 <mat-form-field *ngIf="!geolocationChecked">
                     <input type="text" minLength="5" maxLength="5" placeholder="Zip Code" aria-label="Number" matInput [formControl]="zipCodeControl" required>
                 </mat-form-field>
-                <mat-slide-toggle color="primary" (change)="geoToggleChange($event)"><i class="material-icons">my_location</i></mat-slide-toggle>
+                <mat-slide-toggle color="primary" (change)="geoToggleChange($event)" checked=true title="Use Geolocation"><i class="material-icons">my_location</i></mat-slide-toggle>
             </div>
         </div>
         <div class="search-button">
