@@ -12,10 +12,14 @@ import { HttpService } from '../http.service';
   animations: []
 })
 export class SearchformComponent implements OnInit {
-  isChecked: boolean;
+  geolocationChecked: boolean;
   error: string = 'false';
   //public data: any;
-  myControl = new FormControl('', Validators.required);
+  searchControl = new FormControl('', Validators.required);
+  zipCodeControl = new FormControl('', [Validators.required, Validators.minLength(5), Validators.maxLength(5)]);
+  distance;
+  price;
+  rating;
   options: string[] = ['001 - HEART TRANSPLANT OR IMPLANT OF HEART ASSIST SYSTEM WITH MCC',
   '002 - HEART TRANSPLANT OR IMPLANT OF HEART ASSIST SYSTEM WITHOUT MCC',
   '003 - ECMO OR TRACHEOSTOMY WITH MV >96 HOURS OR PDX EXCEPT FACE, MOUTH AND NECK WITH MAJOR O.R. PROCEDURE',
@@ -783,11 +787,12 @@ export class SearchformComponent implements OnInit {
   public loading = false;
 
   async searchPost() {
+    console.log(this.distance, this.price, this.rating)
     this.loading = true;
-    if (this.myControl.errors == null) {
+    if (this.searchControl.errors == null && (this.zipCodeControl.errors == null || this.geolocationChecked)) {
       if (this.existsInArray()) {
         this.error = 'false';
-        await this.httpService.sendPostRequest(this.myControl.value.substring(0, 3));
+        await this.httpService.sendPostRequest(this.searchControl.value.substring(0, 3), this.distance, this.price, this.rating);
         this.setSearched();
       } else {
         this.error = 'exist';
@@ -806,19 +811,19 @@ export class SearchformComponent implements OnInit {
   }
 
   existsInArray() {
-    if (this.options.indexOf(this.myControl.value) > -1) {
+    if (this.options.indexOf(this.searchControl.value) > -1) {
       return true;
     }
     return false;
   }
 
   ngOnInit() {
-    this.filteredOptions = this.myControl.valueChanges
+    this.filteredOptions = this.searchControl.valueChanges
       .pipe(
         startWith(''),
         map(value => this._filter(value))
       );
-      console.log(this.myControl.value);
+      console.log(this.searchControl.value);
   }
 
   private _filter(value: string): string[] {
@@ -834,7 +839,7 @@ export class SearchformComponent implements OnInit {
 
   @Output() geolocationToggle = new EventEmitter<boolean>();
   geoToggleChange(toggle) {
-    this.isChecked = toggle.checked;
-    this.geolocationToggle.emit(this.isChecked);
+    this.geolocationChecked = toggle.checked;
+    this.geolocationToggle.emit(this.geolocationChecked);
   }
 }
