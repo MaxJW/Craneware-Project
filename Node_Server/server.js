@@ -103,10 +103,10 @@ app.post('/api/searchDRGLatestYear', async (req,res) => {
   res.send(LatestYearResult);
 });
 
-app.post('/api/addNewCondition', function(req,res){
-  const client = dbConnect();
-  client.then(function(db){
-    client.db(dbConfig.name).collection("DRG").insertOne(req.body);
-  });
+app.post('/api/addNewCondition', async function(req,res){
+  const client = await dbConnect();
+  console.log("inserting");
+  await client.db(dbConfig.name).collection("DRG").insertOne(req.body);
   res.send('Data received:\n' + JSON.stringify(req.body));
+  client.close();
 })

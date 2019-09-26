@@ -3,9 +3,6 @@
     <mat-panel-title>
       <b>Add new condition</b>
     </mat-panel-title>
-    <mat-panel-description>
-      ...
-    </mat-panel-description>
   </mat-expansion-panel-header>
   <form [formGroup]="addConditionForm" (ngSubmit)="onSubmit(addConditionForm.value)">
       <mat-form-field>
@@ -17,10 +14,10 @@
           </mat-autocomplete>
       </mat-form-field>
     <mat-form-field>
-      <input matInput placeholder="drgCode" id="two" type="text" formControlName="drgCode" autocomplete="on" required>
+      <input matInput placeholder="drgCode" id="two" value={{val1}}  formControlName="drgCode" required>
     </mat-form-field>
     <mat-form-field>
-      <input matInput placeholder="drgDefinition" id="three" type="text" formControlName="drgDefinition" autocomplete="on" required>
+      <input matInput placeholder="drgDefinition" id="three" value={{val2}} formControlName="drgDefinition" required>
     </mat-form-field>
     <mat-form-field>
       <input matInput placeholder="Provider ID" id="providerId" type="text" formControlName="providerId" required>
@@ -58,7 +55,7 @@
     <mat-form-field>
       <input matInput placeholder="Year" id="year" type="text" formControlName="year" required>
     </mat-form-field>
-      <button mat-button class="button" type="submit">Submit</button>
+      <button [disabled]="!addConditionForm.valid" mat-button class="button" type="submit">Submit</button>
   </form>
 </mat-expansion-panel>
 

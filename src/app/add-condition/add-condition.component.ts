@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, Validators, NgModel, FormGroup, FormBuilder } from '@angular/forms';
-import { Observable } from 'rxjs';
+import { Observable, range } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
 import { HttpService } from '../http.service';
+import Swal from 'sweetalert2';
 
 
 
@@ -775,6 +776,9 @@ export class AddConditionComponent implements OnInit {
   '998 - PRINCIPAL DIAGNOSIS INVALID AS DISCHARGE DIAGNOSIS'];
   filteredOptions: Observable<string[]>;
   myControl = new FormControl('', Validators.required);
+  val1: '';
+  val2: '';
+  
 
   public addConditionForm = this.formBuilder.group({
     drgCode: ['', Validators.required],
@@ -806,10 +810,10 @@ export class AddConditionComponent implements OnInit {
 
   private _filter(value: string): string[] {
     const filterValue = value.toLowerCase();
-
     return this.options.filter(option => option.toLowerCase().includes(filterValue));
   }
 
+  //Submits to database but returns error for some reason
   onSubmit(data) {
     // Process form data here
     console.log('New condition submitted', data);
@@ -818,8 +822,12 @@ export class AddConditionComponent implements OnInit {
         d => console.log("Success", d),
         err => console.log("Errorr", err)
         );
-
-    //this.addConditionForm.reset();
+        Swal.fire(
+          'Good job!',
+          'Data submitted to database',
+          'success'
+        )
+    this.addConditionForm.reset();
   }
 
   clicked(){
@@ -830,7 +838,12 @@ export class AddConditionComponent implements OnInit {
   onchange(name) {
     var drgCode = <HTMLInputElement>document.getElementById("two");
     var drgDefinition = <HTMLInputElement>document.getElementById("three");
-    drgCode.value = name.substring(0,3);
-    drgDefinition.value = name.substring(6, name.length);
+    //drgCode.value = name.substring(0,3);
+    //drgDefinition.value = name.substring(6, name.length);
+    this.val1 = name.substring(0,3);
+    this.val2 = name.substring(6, name.length);
+    this.addConditionForm.controls['drgCode'].setValue(name.substring(0,3));
+    this.addConditionForm.controls['drgDefinition'].setValue(name.substring(6, name.length));
 }
 }
+
