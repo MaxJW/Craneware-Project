@@ -53,7 +53,7 @@ export class MapviewComponent implements OnInit {
   ngOnDestroy() {
     this.searchDataSub.unsubscribe();
   }
-
+counter = 0;
   async initMap() {
     const mapProperties = {
       center: new google.maps.LatLng(39.833333, -98.583333),
@@ -72,6 +72,7 @@ export class MapviewComponent implements OnInit {
     var request;
     var myquery;
     var resultstoget = 3; // !!!!!!! RESULTS TO GET VALUE !!!!!!!!!
+    
     self.distances = [];
     for (var loop = 0; loop < resultstoget; loop++) {
       myquery = this.searchData[loop].providerName + ", " + this.searchData[loop].providerStreetAddress + ", " + this.searchData[loop].providerCity + ", " + this.searchData[loop].providerState + " " + this.searchData[loop].providerZipCode;
@@ -88,7 +89,6 @@ export class MapviewComponent implements OnInit {
 
   createGeolocationMarker() {
     var self = this;
-
     //Get user location
     if (this.geotoggleEnabled) {
       if (navigator.geolocation) {
@@ -151,6 +151,8 @@ export class MapviewComponent implements OnInit {
       animation: google.maps.Animation.DROP,
     });
 
+    //console.log(this.distanceData);
+
     this.counter++;
     console.log(this.counter);
     
@@ -179,10 +181,18 @@ export class MapviewComponent implements OnInit {
     infoWindow.open(this.map);
   }
 
-  findPlaceFromQuery(request, resultstoget, loop) {
-    console.log();
+  sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+  }
+
+  async findPlaceFromQuery(request, resultstoget, loop) {
+    if(this.counter == 10){
+      await this.sleep(1000);
+      this.counter = 0;
+    }
     var self = this;
     self.service.findPlaceFromQuery(request, async function (results, status) {
+      self.counter++;
       if (status === google.maps.places.PlacesServiceStatus.OK) {
         for (var i = 0; i < results.length; i++) {
           //console.log(results[i]);
@@ -197,37 +207,44 @@ export class MapviewComponent implements OnInit {
   async calculateDistance(location, providerId, providerName) {
     var selectedHospitals = this.dataService.getSearchData();
     var currentLocation = this.pos;
-
-    let service = new google.maps.DistanceMatrixService();
-    await service.getDistanceMatrix(
-      {
-        origins: [currentLocation],
-        destinations: [location.geometry.location],
-        travelMode: google.maps.TravelMode.DRIVING,
-        unitSystem: google.maps.UnitSystem.IMPERIAL,
-        avoidHighways: false,
-        avoidTolls: false
-      }, (response: any) => {
-        let ori = response.originAddresses;
-        let desti = response.destinationAddresses;
-        for (let k = 0; k < ori.length; k++) {
-          let results = response.rows[k].elements;
-          //console.log(results);
-          for (let j = 0; j < results.length; j++) {
-            const travel = {
-              providerId: providerId,
-              providerName: providerName,
-              from: ori[k],
-              to: desti[j],
-              distance: results[j].distance.text,
-              duration: results[j].duration.text
-            };
-            this.distances.push(travel);
-            console.log(providerId + ': ' + ori[k] + ' to ' + desti[j] + ': ' + results[j].distance.text + ' in ' + results[j].duration.text);
-            //this.dataService.setDistanceData(travel);
-            //console.log(providerId +': ' + ori[k] + ' to ' + desti[j] + ': ' + results[j].distance.text + ' in ' + results[j].duration.text);
+    //console.log(currentLocation);
+    if(!(currentLocation.lat === 0 && currentLocation.lng === 0)){
+      let service = new google.maps.DistanceMatrixService();
+      await service.getDistanceMatrix(
+        {
+          origins: [currentLocation],
+          destinations: [location.geometry.location],
+          travelMode: google.maps.TravelMode.DRIVING,
+          unitSystem: google.maps.UnitSystem.IMPERIAL,
+          avoidHighways: false,
+          avoidTolls: false
+        }, (response: any) => {
+          let ori = response.originAddresses;
+          let desti = response.destinationAddresses;
+          for (let k = 0; k < ori.length; k++) {
+            let results = response.rows[k].elements;
+            if(results[0].status == "ZERO_RESULTS"){
+              return;
+            }else if (results[0].status == "OK"){
+              for (let j = 0; j < results.length; j++) {
+              const travel = {
+                providerId: providerId,
+                providerName: providerName,
+                from: ori[k],
+                to: desti[j],
+                distance: results[j].distance.text,
+                duration: results[j].duration.text
+              };
+              this.distances.push(travel);
+              console.log(providerId + ': ' + ori[k] + ' to ' + desti[j] + ': ' + results[j].distance.text + ' in ' + results[j].duration.text);
+              // this.dataService.setDistanceData(travel);
+              // console.log(providerId +': ' + ori[k] + ' to ' + desti[j] + ': ' + results[j].distance.text + ' in ' + results[j].duration.text);
+            }
+            }
+            //console.log(results[0].status);
           }
-        }
-      });
-  }
+        });
+
+      }
+    }
 }
