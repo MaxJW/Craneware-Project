@@ -1,6 +1,10 @@
 :host {
   width: 95%;
-  padding-top: 50px;
+}
+
+mat-expansion-panel {
+  margin: auto;
+  width: 80%;
 }
 
 mat-form-field {

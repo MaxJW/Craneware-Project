@@ -40,7 +40,7 @@ export class MapviewComponent implements OnInit {
         console.log(this.searchData);
         this.initMap();
       });
-
+      console.log(this.searchData);
     this.distanceData = this.dataService.getDistanceData();
     this.distanceDataSub = this.dataService.getDistanceDataUpdateListener()
       .subscribe((distanceData) => {
@@ -180,6 +180,7 @@ export class MapviewComponent implements OnInit {
   }
 
   findPlaceFromQuery(request, resultstoget, loop) {
+    console.log();
     var self = this;
     self.service.findPlaceFromQuery(request, async function (results, status) {
       if (status === google.maps.places.PlacesServiceStatus.OK) {
