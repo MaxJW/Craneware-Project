@@ -8,7 +8,8 @@ import { AddConditionComponent } from './add-condition/add-condition.component';
 export class HttpService{
   searchDrgUrl: string = 'http://104.248.165.91:8000/api/searchDRG';
   searchDrgLatestYearUrl: string = 'http://104.248.165.91:8000/api/searchDRGLatestYear';
-  addNewCondition: string = 'http://104.248.165.91:8000/api/addNewCondition';
+  //addNewCondition: string = 'http://104.248.165.91:8000/api/addNewCondition';
+  addNewCondition: string = 'http://localhost:8000/api/addNewCondition';
   getbaseUrl: string = 'http://104.248.165.91:8000/';
 
   public responce: any;
@@ -38,16 +39,8 @@ export class HttpService{
       // .subscribe(res => console.log(res));
   }
 
-  createCondition(newCondition: AddConditionComponent){
-    return this.http.post(this.addNewCondition, newCondition)
-      .toPromise()
-      .then(res => console.log(res))
-      .catch(this.handleError);
+  createCondition(data){
+    return this.http.post<any>(this.addNewCondition, data)
   }
 
-  private handleError (error: any) {
-    let errMsg = (error.message) ? error.message :
-    error.status ? `${error.status} - ${error.statusText}` : 'Server error';
-    console.error(errMsg); // log to console instead
-  }
 }

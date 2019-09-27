@@ -20,7 +20,7 @@ export class MapviewComponent implements OnInit {
   service: google.maps.places.PlacesService;
   infowindow: google.maps.InfoWindow;
   @Input() geotoggleEnabled;
-
+  counter: number = 0;
   //Database get
   searchData;
   distanceData;
@@ -40,8 +40,7 @@ export class MapviewComponent implements OnInit {
         console.log(this.searchData);
         this.initMap();
       });
-    console.log(this.searchData);
-
+      console.log(this.searchData);
     this.distanceData = this.dataService.getDistanceData();
     this.distanceDataSub = this.dataService.getDistanceDataUpdateListener()
       .subscribe((distanceData) => {
@@ -68,7 +67,6 @@ counter = 0;
     this.service = new google.maps.places.PlacesService(this.map);
 
     this.createGeolocationMarker();
-
     var self = this;
     //Search for first three received hospitals and place markers on map
     var request;
@@ -77,7 +75,6 @@ counter = 0;
     
     self.distances = [];
     for (var loop = 0; loop < resultstoget; loop++) {
-      console.log(self.searchData[loop].providerName);
       myquery = this.searchData[loop].providerName + ", " + this.searchData[loop].providerStreetAddress + ", " + this.searchData[loop].providerCity + ", " + this.searchData[loop].providerState + " " + this.searchData[loop].providerZipCode;
       request = {
         query: myquery,
@@ -102,7 +99,7 @@ counter = 0;
           };
 
           var image = {
-            url: 'https://i.imgur.com/CHjBsrd.png',
+            url: '/assets/icon.png',
             size: new google.maps.Size(30, 30),
             origin: new google.maps.Point(0, 0),
             anchor: new google.maps.Point(15, 15)
@@ -122,6 +119,7 @@ counter = 0;
 
           self.map.setCenter(new google.maps.LatLng(self.pos.lat, self.pos.lng));
           self.map.setZoom(6);
+          self.createRadius();
         }, function () {
           self.handleLocationError(true, self.infowindow, self.map.getCenter());
         });
@@ -132,6 +130,19 @@ counter = 0;
     }
   }
 
+  createRadius() {
+    var geoCircle = new google.maps.Circle({
+      strokeColor: '#70B7FF',
+      strokeOpacity: 0.8,
+      strokeWeight: 2,
+      fillColor: '#70B7FF',
+      fillOpacity: 0.35,
+      map: this.map,
+      center: this.pos,
+      radius: 1609 * /*Get distance from search?*/100
+    });
+  }
+
   createMarker(place: any, result: any) {
     var marker = new google.maps.Marker({
       map: this.map,
@@ -139,7 +150,12 @@ counter = 0;
       title: place.name,
       animation: google.maps.Animation.DROP,
     });
+
     //console.log(this.distanceData);
+
+    this.counter++;
+    console.log(this.counter);
+    
     var self = this;
     google.maps.event.addListener(marker, 'click', function () {
       self.infowindow.setContent(

@@ -7,6 +7,7 @@
 }
 
 body {
-    background: url("https://source.unsplash.com/1920x1080/?nature") no-repeat center center fixed;
+    background-color: rgb(34, 151, 206);
+    /*background: rgb(26, 141, 194) url("https://source.unsplash.com/1920x1080/?nature") no-repeat center center fixed;*/
     background-size: cover;
 }

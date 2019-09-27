@@ -1,7 +1,6 @@
 import { Component, ViewChild } from '@angular/core';
 import { trigger, state, transition, animate, style } from '@angular/animations';
 import { ShortcutInput, ShortcutEventOutput } from 'ng-keyboard-shortcuts';
-import { MapviewComponent } from './mapview/mapview.component';
 
 @Component({
   selector: 'app-root',

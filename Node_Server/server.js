@@ -103,27 +103,10 @@ app.post('/api/searchDRGLatestYear', async (req,res) => {
   res.send(LatestYearResult);
 });
 
-app.post('/api/addNewCondition', function(req,res){
-  var data = {
-    drgCode: req.body.drgCode,
-    drgDefinition: req.body.drgDefinition,
-    providerId: req.body.providerId,
-    providerName: req.body.providerName,
-    providerStreetAddress: req.body.providerStreetAddress,
-    providerCity: req.body.providerCity,
-    providerState: req.body.providerState,
-    providerZipCode: req.body.providerZipCode,
-    hospitalReferralRegionHRRDesciption: req.body.hospitalReferralRegionHRRDesciption,
-    totalDischarges: req.body.totalDischarges,
-    averageCoveredCharges: req.body.averageCoveredCharges,
-    averageTotalPayments: req.body.averageTotalPayments,
-    averageMedicarePayments: req.body.averageMedicarePayments,
-    year: req.body.year
-  }
-
+app.post('/api/addNewCondition', async function(req,res){
   const client = await dbConnect();
-  let results = await client.db(dbConfig.name).collection("DRG").insertOne(data, function(err, result){
-    console.log("data has been inserterd")
-    client.close();
-  });
+  console.log("inserting");
+  await client.db(dbConfig.name).collection("DRG").insertOne(req.body);
+  res.send('Data received:\n' + JSON.stringify(req.body));
+  client.close();
 })
