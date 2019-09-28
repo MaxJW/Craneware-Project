@@ -103,6 +103,35 @@ app.post('/api/searchDRGLatestYear', async (req,res) => {
   res.send(LatestYearResult);
 });
 
+
+app.post('/api/searchDRGLatestYearWithHospitalLocationsAndFiltering', async (req,res) => {
+  if(!req.body.drg) {
+      return res.status(400).send({
+        success: 'false',
+        message: 'drg code is required'
+      });
+  }
+
+  const client = await dbConnect();
+  let results = await client.db(dbConfig.name).collection("DRG").aggregate([{$match : {drgCode: req.body.drg}},{$sort : {providerId: 1, year: 1}},{$lookup: {from: "Hospitals", localField: "providerId", foreignField: "_id", as: "hospital"}}]).toArray();
+
+  var LatestYearResult = [];
+
+  for(i=0; i<results.length;i++){
+    if(i != results.length-1){
+      if(results[i].providerId != results[i+1].providerId){
+        LatestYearResult.push(results[i]);
+      }
+    }
+  }
+  LatestYearResult.push(results[results.length-1]);
+
+  client.close();
+  res.send(LatestYearResult);
+});
+
+
+
 app.post('/api/addNewCondition', async function(req,res){
   const client = await dbConnect();
   console.log("inserting");

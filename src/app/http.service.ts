@@ -8,6 +8,7 @@ import { AddConditionComponent } from './add-condition/add-condition.component';
 export class HttpService{
   searchDrgUrl: string = 'http://104.248.165.91:8000/api/searchDRG';
   searchDrgLatestYearUrl: string = 'http://104.248.165.91:8000/api/searchDRGLatestYear';
+  searchDRGLatestYearWithHospitalLocationsAndFiltering: string = 'http://104.248.165.91:8000/api/searchDRGLatestYearWithHospitalLocationsAndFiltering';
   //addNewCondition: string = 'http://104.248.165.91:8000/api/addNewCondition';
   addNewCondition: string = 'http://localhost:8000/api/addNewCondition';
   getbaseUrl: string = 'http://104.248.165.91:8000/';
@@ -41,6 +42,23 @@ export class HttpService{
 
   createCondition(data){
     return this.http.post<any>(this.addNewCondition, data)
+  }
+
+  sendPostGetAllData(data) {
+    console.log("sending req")
+    const headers = new HttpHeaders()
+      .set('cache-control', 'no-cache')
+      .set('content-type', 'application/x-www-form-urlencoded');
+
+    const body = new HttpParams({
+      fromObject: {
+        drg: data,
+      }
+    });
+
+    return this.http
+      .post(this.searchDRGLatestYearWithHospitalLocationsAndFiltering, body, { headers }).toPromise().then(res => { this.responce = res, this.dataService.setSearchData(this.responce); } );
+      // .subscribe(res => this.responce = res);
   }
 
 }
