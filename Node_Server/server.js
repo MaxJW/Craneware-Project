@@ -120,10 +120,12 @@ app.post('/api/searchDRGLatestYearWithHospitalLocationsAndFiltering', async (req
   for(i=0; i<results.length;i++){
     if(i != results.length-1){
       if(results[i].providerId != results[i+1].providerId){
+        results[i].averageMedicareCustomerPayments = (results[i].averageTotalPayments - results[i].averageMedicarePayments);
         LatestYearResult.push(results[i]);
       }
     }
   }
+  results[results.length-1].averageMedicareCustomerPayments = (results[results.length-1].averageTotalPayments - results[results.length-1].averageMedicarePayments);
   LatestYearResult.push(results[results.length-1]);
 
   client.close();
