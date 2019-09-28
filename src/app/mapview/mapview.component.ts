@@ -53,7 +53,7 @@ export class MapviewComponent implements OnInit {
   ngOnDestroy() {
     this.searchDataSub.unsubscribe();
   }
-counter = 0;
+
   async initMap() {
     const mapProperties = {
       center: new google.maps.LatLng(39.833333, -98.583333),
@@ -72,7 +72,7 @@ counter = 0;
     var request;
     var myquery;
     var resultstoget = 3; // !!!!!!! RESULTS TO GET VALUE !!!!!!!!!
-    
+
     self.distances = [];
     for (var loop = 0; loop < resultstoget; loop++) {
       myquery = this.searchData[loop].providerName + ", " + this.searchData[loop].providerStreetAddress + ", " + this.searchData[loop].providerCity + ", " + this.searchData[loop].providerState + " " + this.searchData[loop].providerZipCode;
@@ -155,7 +155,7 @@ counter = 0;
 
     this.counter++;
     console.log(this.counter);
-    
+
     var self = this;
     google.maps.event.addListener(marker, 'click', function () {
       self.infowindow.setContent(
