@@ -804,7 +804,7 @@ export class SearchformComponent implements OnInit {
         } else {
           this.location = this.zipCodeControl.value;
         }
-        await this.httpService.sendPostRequest(this.searchControl.value.substring(0, 3));/*, this.distance, this.price, this.rating, this.lat, this.lng, this.location);*/
+        await this.httpService.sendPostGetAllData(this.searchControl.value.substring(0, 3));/*, this.distance, this.price, this.rating, this.lat, this.lng, this.location);*/
         this.setSearched();
       } else {
         this.error = 'exist';
