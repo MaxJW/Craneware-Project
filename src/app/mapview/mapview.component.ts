@@ -74,6 +74,11 @@ export class MapviewComponent implements OnInit {
     var resultstoget = 3; // !!!!!!! RESULTS TO GET VALUE !!!!!!!!!
 
     self.distances = [];
+
+    if (this.searchData.length < resultstoget) {
+      resultstoget = this.searchData.length;
+    }
+
     for (var loop = 0; loop < resultstoget; loop++) {
       myquery = this.searchData[loop].providerName + ", " + this.searchData[loop].providerStreetAddress + ", " + this.searchData[loop].providerCity + ", " + this.searchData[loop].providerState + " " + this.searchData[loop].providerZipCode;
       request = {
