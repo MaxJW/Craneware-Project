@@ -166,9 +166,15 @@ export class MapviewComponent implements OnInit {
       self.infowindow.setContent(
         `<div class="infowindow_content">` +
         `<h3>` + self.searchData[result].providerName + `</h3><hr style="margin: 4px 0"/>` +
-        `<p style="font-size: 0.9rem"><b>Price: </b>` + self.searchData[result].averageTotalPayments + `</p>` +
-        `<p style="font-size: 0.9rem"><b>Distance: </b>` + self.distanceData[result].distance + `</p>` +
+        `<p style="font-size: 0.9rem"><b>Uninsured Price: </b>$` + (parseFloat(self.searchData[result].averageCoveredCharges).toFixed(2)).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + `</p>` +
+        `<p style="font-size: 0.9rem"><b>Medicare Price: </b>$` + (parseFloat(self.searchData[result].averageMedicareCustomerPayments).toFixed(2)).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + `</p>` +
         `</div>`
+       // `<div class="infowindow_content">` +
+       // `<h3>` + self.searchData[result].providerName + `</h3><hr style="margin: 4px 0"/>` +
+       // `<p style="font-size: 0.9rem"><b>Uninsured Price: </b>` + self.searchData[result].averageCoveredCharges + `</p>` +
+       // `<p style="font-size: 0.9rem"><b>Medicare Price: </b>` + self.searchData[result].averageMedicareCustomerPayments + `</p>` +
+       // `<p style="font-size: 0.9rem"><b>Distance: </b>` + self.distanceData[result].distance + `</p>` +
+       // `</div>`
       );
       self.infowindow.open(self.map, this);
     });
