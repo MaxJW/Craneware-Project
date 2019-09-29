@@ -25,13 +25,18 @@
         <td mat-cell *matCellDef="let data"> {{data.providerZipCode}} </td>
     </ng-container>
 
+    <ng-container matColumnDef="hospital[0].rating">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Rating (/5) </th>
+      <td mat-cell *matCellDef="let data"> {{data.hospital[0].rating}} </td>
+  </ng-container>
+
     <ng-container matColumnDef="averageCoveredCharges">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header> Uninsured Price </th>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Uninsured Price ($)</th>
         <td mat-cell *matCellDef="let data"> {{data.averageCoveredCharges | number : '1.2-2'}} </td>
     </ng-container>
 
     <ng-container matColumnDef="averageMedicareCustomerPayments">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> Medicare Price </th>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Medicare Price ($)</th>
       <td mat-cell *matCellDef="let data"> {{data.averageMedicareCustomerPayments| number : '1.2-2'}} </td>
   </ng-container>
 
