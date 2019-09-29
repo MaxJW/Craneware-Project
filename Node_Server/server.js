@@ -128,9 +128,122 @@ app.post('/api/searchDRGLatestYearWithHospitalLocationsAndFiltering', async (req
   results[results.length-1].averageMedicareCustomerPayments = (results[results.length-1].averageTotalPayments - results[results.length-1].averageMedicarePayments);
   LatestYearResult.push(results[results.length-1]);
 
+  if(req.body.distanceFlter && req.body.distanceFlter != "null" && req.body.ratingFilter != null && req.body.ratingFilter != "undefined" && req.body.ratingFilter != undefined) {
+    var tempArr = await applyDistanceFilter(req.body.distanceFlter, LatestYearResult);
+    LatestYearResult = [];
+    LatestYearResult = tempArr.slice(0);
+    console.log("distnace Filter")
+  }
+
+  if(req.body.priceFilter && req.body.priceFilter != "null" && req.body.ratingFilter != null && req.body.ratingFilter != "undefined" && req.body.ratingFilter != undefined) {
+    var tempArr = await applyPriceFilter(req.body.priceFilter, LatestYearResult);
+    LatestYearResult = [];
+    LatestYearResult = tempArr.slice(0);
+    console.log("price Filter")
+  }
+
+  if(req.body.ratingFilter && req.body.ratingFilter != "null" && req.body.ratingFilter != null && req.body.ratingFilter != "undefined" && req.body.ratingFilter != undefined) {
+    var tempArr = await applyRatingFilter(req.body.ratingFilter, LatestYearResult);
+    LatestYearResult = [];
+    LatestYearResult = tempArr.slice(0);
+    console.log("rating Filter")
+  }
+
+
   client.close();
   res.send(LatestYearResult);
 });
+
+
+function applyDistanceFilter(distance, LatestYearResult){
+  tempArr = LatestYearResult.slice(0);
+  LatestYearResult = [];
+  for(var i=0; i<tempArr.length; i++){
+    //if(parseFloat(tempArr[i].averageCoveredCharges) || parseFloat(tempArr[i].averageMedicareCustomerPayments))
+  }
+}
+
+function applyPriceFilter(price, LatestYearResult){
+  tempArr = LatestYearResult.slice(0);
+  LatestYearResult = [];
+
+  if(price == "smallest"){
+    for(var i=0; i<tempArr.length; i++){
+      if((parseFloat(tempArr[i].averageCoveredCharges) >= 0 && parseFloat(tempArr[i].averageCoveredCharges) <= 10000) || (parseFloat(tempArr[i].averageMedicareCustomerPayments) >= 0 && parseFloat(tempArr[i].averageMedicareCustomerPayments) <= 10000)){
+        LatestYearResult.push(tempArr[i])
+      }
+    }
+    return LatestYearResult;
+  }else if(price == "small"){
+    for(var i=0; i<tempArr.length; i++){
+      if((parseFloat(tempArr[i].averageCoveredCharges) >= 10000 && parseFloat(tempArr[i].averageCoveredCharges) <= 100000) || (parseFloat(tempArr[i].averageMedicareCustomerPayments) >= 10000 && parseFloat(tempArr[i].averageMedicareCustomerPayments) <= 100000)){
+        LatestYearResult.push(tempArr[i])
+      }
+    }
+    return LatestYearResult;
+  }else if(price == "medium"){
+    for(var i=0; i<tempArr.length; i++){
+      if((parseFloat(tempArr[i].averageCoveredCharges) >= 100000 && parseFloat(tempArr[i].averageCoveredCharges) <= 250000) || (parseFloat(tempArr[i].averageMedicareCustomerPayments) >= 100000 && parseFloat(tempArr[i].averageMedicareCustomerPayments) <= 250000)){
+        LatestYearResult.push(tempArr[i])
+      }
+    }
+    return LatestYearResult;
+  }else if(price == "large"){
+    for(var i=0; i<tempArr.length; i++){
+      if((parseFloat(tempArr[i].averageCoveredCharges) >= 250000 && parseFloat(tempArr[i].averageCoveredCharges) <= 500000) || (parseFloat(tempArr[i].averageMedicareCustomerPayments) >= 250000 && parseFloat(tempArr[i].averageMedicareCustomerPayments) <= 500000)){
+        LatestYearResult.push(tempArr[i])
+      }
+    }
+    return LatestYearResult;
+  }else if(price == "largest"){
+    for(var i=0; i<tempArr.length; i++){
+      if((parseFloat(tempArr[i].averageCoveredCharges) >= 500000) || (parseFloat(tempArr[i].averageMedicareCustomerPayments) >= 500000)){
+        LatestYearResult.push(tempArr[i])
+      }
+    }
+    return LatestYearResult;
+  }
+}
+
+function applyRatingFilter(rating, LatestYearResult){
+  tempArr = LatestYearResult.slice(0);
+  LatestYearResult = [];
+
+  if(rating == "1"){
+    for(var i=0; i<tempArr.length; i++){
+      if(parseFloat(tempArr[i].hospital[0].rating) >= 1){
+        LatestYearResult.push(tempArr[i])
+      }
+    }
+    return LatestYearResult;
+  }else if(rating == "2"){
+    for(var i=0; i<tempArr.length; i++){
+      if(parseFloat(tempArr[i].hospital[0].rating) >= 2){
+        LatestYearResult.push(tempArr[i])
+      }
+    }
+    return LatestYearResult;
+  }else if(rating == "3"){
+    for(var i=0; i<tempArr.length; i++){
+      if(parseFloat(tempArr[i].hospital[0].rating) >= 3){
+        LatestYearResult.push(tempArr[i])
+      }
+    }
+    return LatestYearResult;
+  }else if(rating == "4"){
+    for(var i=0; i<tempArr.length; i++){
+      if(parseFloat(tempArr[i].hospital[0].rating) >= 4){
+        LatestYearResult.push(tempArr[i])
+      }
+    }
+    return LatestYearResult;
+  }
+}
+
+
+
+
+
 
 
 

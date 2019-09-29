@@ -44,15 +44,27 @@ export class HttpService{
     return this.http.post<any>(this.addNewCondition, data)
   }
 
-  sendPostGetAllData(data) {
+  sendPostGetAllData(data, distance, price, rating) {
     console.log("sending req")
     const headers = new HttpHeaders()
       .set('cache-control', 'no-cache')
       .set('content-type', 'application/x-www-form-urlencoded');
 
+    if(distance === undefined){
+      distance = null;
+    }
+    if(price === undefined){
+      price = null;
+    }
+    if(rating === undefined){
+      rating = null;
+    }
     const body = new HttpParams({
       fromObject: {
         drg: data,
+        distanceFlter: distance,
+        priceFilter: price,
+        ratingFilter: rating,
       }
     });
 
