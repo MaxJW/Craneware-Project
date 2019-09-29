@@ -71,7 +71,7 @@ export class MapviewComponent implements OnInit {
     //Search for first three received hospitals and place markers on map
     var request;
     var myquery;
-    var resultstoget = 3; // !!!!!!! RESULTS TO GET VALUE !!!!!!!!!
+    var resultstoget = 50; // !!!!!!! RESULTS TO GET VALUE !!!!!!!!!
 
     self.distances = [];
 
@@ -85,9 +85,8 @@ export class MapviewComponent implements OnInit {
         query: myquery,
         fields: ['name', 'geometry'],
       };
-      //console.log(self.findPlaceFromQuery(request, resultstoget, loop));
-      //distances.push(self.findPlaceFromQuery(request, resultstoget, loop));
-      self.findPlaceFromQuery(request, resultstoget, loop)
+
+      this.createMarker(this.searchData[loop].hospital[0], this.searchData[loop]);
     }
     self.dataService.setDistanceData(self.distances);
   }
@@ -148,15 +147,14 @@ export class MapviewComponent implements OnInit {
     });
   }
 
-  createMarker(place: any, result: any) {
+  createMarker(location, hospital) {
+    console.log();
     var marker = new google.maps.Marker({
       map: this.map,
-      position: place.geometry.location,
-      title: place.name,
+      position: {lat: location.lat, lng: location.lon},
+      title: hospital.providerName,
       animation: google.maps.Animation.DROP,
     });
-
-    //console.log(this.distanceData);
 
     this.counter++;
     console.log(this.counter);
@@ -165,16 +163,11 @@ export class MapviewComponent implements OnInit {
     google.maps.event.addListener(marker, 'click', function () {
       self.infowindow.setContent(
         `<div class="infowindow_content">` +
-        `<h3>` + self.searchData[result].providerName + `</h3><hr style="margin: 4px 0"/>` +
-        `<p style="font-size: 0.9rem"><b>Uninsured Price: </b>$` + (parseFloat(self.searchData[result].averageCoveredCharges).toFixed(2)).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + `</p>` +
-        `<p style="font-size: 0.9rem"><b>Medicare Price: </b>$` + (parseFloat(self.searchData[result].averageMedicareCustomerPayments).toFixed(2)).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + `</p>` +
+        `<h3>` + hospital.providerName + `</h3><hr style="margin: 4px 0"/>` +
+        `<p style="font-size: 0.9rem"><b>Uninsured Price: </b>$` + (parseFloat(hospital.averageCoveredCharges).toFixed(2)).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + `</p>` +
+        `<p style="font-size: 0.9rem"><b>Medicare Price: </b>$` + (parseFloat(hospital.averageMedicareCustomerPayments).toFixed(2)).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + `</p>` +
         `</div>`
-       // `<div class="infowindow_content">` +
-       // `<h3>` + self.searchData[result].providerName + `</h3><hr style="margin: 4px 0"/>` +
-       // `<p style="font-size: 0.9rem"><b>Uninsured Price: </b>` + self.searchData[result].averageCoveredCharges + `</p>` +
-       // `<p style="font-size: 0.9rem"><b>Medicare Price: </b>` + self.searchData[result].averageMedicareCustomerPayments + `</p>` +
        // `<p style="font-size: 0.9rem"><b>Distance: </b>` + self.distanceData[result].distance + `</p>` +
-       // `</div>`
       );
       self.infowindow.open(self.map, this);
     });
@@ -194,25 +187,6 @@ export class MapviewComponent implements OnInit {
 
   sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
-  }
-
-  async findPlaceFromQuery(request, resultstoget, loop) {
-    if(this.counter == 10){
-      await this.sleep(1000);
-      this.counter = 0;
-    }
-    var self = this;
-    self.service.findPlaceFromQuery(request, async function (results, status) {
-      self.counter++;
-      if (status === google.maps.places.PlacesServiceStatus.OK) {
-        for (var i = 0; i < results.length; i++) {
-          //console.log(results[i]);
-          self.createMarker(results[i], loop);
-          await self.calculateDistance(results[i], self.searchData[loop].providerId, self.searchData[loop].providerName);
-          //console.log(await self.calculateDistance(results[i], self.searchData[loop].providerId));
-        }
-      }
-    });
   }
 
   async calculateDistance(location, providerId, providerName) {
