@@ -2,6 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 var MongoClient = require('mongodb').MongoClient;
+var distance = require('google-distance-matrix');
 
 const dbConfig = require('./config/database.config.js');
 
@@ -10,6 +11,10 @@ const app = express()
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 app.use(cors({ origin: '*' }));
+
+distance.key('');
+distance.mode('driving');
+distance.units('imperial');
 
 app.listen(8000, () => {
     console.log('Server started!')
@@ -128,13 +133,6 @@ app.post('/api/searchDRGLatestYearWithHospitalLocationsAndFiltering', async (req
   results[results.length-1].averageMedicareCustomerPayments = (results[results.length-1].averageTotalPayments - results[results.length-1].averageMedicarePayments);
   LatestYearResult.push(results[results.length-1]);
 
-  if(req.body.distanceFlter && req.body.distanceFlter != "null" && req.body.ratingFilter != null && req.body.ratingFilter != "undefined" && req.body.ratingFilter != undefined) {
-    var tempArr = await applyDistanceFilter(req.body.distanceFlter, LatestYearResult);
-    LatestYearResult = [];
-    LatestYearResult = tempArr.slice(0);
-    console.log("distnace Filter")
-  }
-
   if(req.body.priceFilter && req.body.priceFilter != "null" && req.body.ratingFilter != null && req.body.ratingFilter != "undefined" && req.body.ratingFilter != undefined) {
     var tempArr = await applyPriceFilter(req.body.priceFilter, LatestYearResult);
     LatestYearResult = [];
@@ -147,6 +145,27 @@ app.post('/api/searchDRGLatestYearWithHospitalLocationsAndFiltering', async (req
     LatestYearResult = [];
     LatestYearResult = tempArr.slice(0);
     console.log("rating Filter")
+  }
+
+  if(req.body.zip && req.body.zip != "null" && req.body.zip != null && req.body.zip != "undefined" && req.body.zip != undefined){
+    var promise = await calculateDistance(LatestYearResult, req.body.zip);
+    LatestYearResult = [];
+    LatestYearResult = tempDistanceArr.slice(0);
+    console.log("Distance Calculation Zip Code")
+  }else if((req.body.lat && req.body.lon) && (req.body.lat != "null" && req.body.lon != "null") && (req.body.lat != null && req.body.lon != null) && (req.body.lat != "undefined" && req.body.lon != "undefined") && (req.body.lat != undefined && req.body.lon != undefined)){
+    var userLocation = req.body.lat + "," + req.body.lon;
+    var promise = await calculateDistance(LatestYearResult, userLocation);
+    LatestYearResult = [];
+    LatestYearResult =  tempDistanceArr.slice(0);
+    console.log("Distance Calculation Geolocation")
+  }
+  
+
+  if(req.body.distanceFlter && req.body.distanceFlter != "null" && req.body.ratingFilter != null && req.body.ratingFilter != "undefined" && req.body.ratingFilter != undefined) {
+    var tempArr = await applyDistanceFilter(req.body.distanceFlter, LatestYearResult);
+    LatestYearResult = [];
+    LatestYearResult = tempArr.slice(0);
+    console.log("distance Filter")
   }
 
 
@@ -238,6 +257,93 @@ function applyRatingFilter(rating, LatestYearResult){
     }
     return LatestYearResult;
   }
+}
+
+
+var tempDistanceArr = []
+function calculateDistance(LatestYearResult, userLocation,){
+  console.log("make first promise")
+  return new Promise(async resolve =>{
+    tempArr = LatestYearResult.slice(0);
+    LatestYearResult = [];
+    var destinations = [];
+    var counter = 0;
+    var counterLimit = 25;
+    var distancesGenerated = 0;
+    var limitPerSecond = 1000;
+    var arrIndex = 0;
+
+    if(tempArr.length < counterLimit){
+      counterLimit = tempArr.length;
+    }
+
+    var origins = [userLocation];
+    for(var i=0; i<tempArr.length; i++){
+      if(!(counter == counterLimit)){
+        destinations.push((tempArr[i].hospital[0].lat +"," +tempArr[i].hospital[0].lon))
+        counter++;
+      }
+
+      if(counter == counterLimit){
+        distancesGenerated = distancesGenerated+25;
+        distance.matrix(origins, destinations, function ( err, distances) {
+          console.log("make second promise")
+            return new Promise(resolve => {
+              console.log("Print first");
+              if (err) {
+                return console.log(err);
+              }
+              if (!distances) {
+                return console.log('no distances');
+              }
+              if (distances.status == 'OK') {
+                for (var i = 0; i < origins.length; i++) {
+                  for (var j = 0; j < destinations.length; j++) {
+                    var origin = distances.origin_addresses[i];
+                    var destination = distances.destination_addresses[j];
+                    if (distances.rows[0].elements[j].status == 'OK') {
+                      var distance = distances.rows[i].elements[j].distance.text;
+                      console.log("Print second");
+                      //console.log('Distance from ' + origin + ' to ' + destination + ' is ' + distance);
+                      tempDistanceArr.push(tempArr[arrIndex]);
+                      tempDistanceArr[arrIndex].distance = distance;
+                      pushToTempDistanceArr(tempDistanceArr);
+                    }
+                    else {
+                      console.log(destination + ' is not reachable by land from ' + origin);
+                    }
+                  }
+                }
+              }
+              counter = 0;
+              destinations = [];
+              console.log("resolve second promise")
+              resolve();
+            });
+          });
+        //console.log(distancesGenerated);
+        if(distancesGenerated == limitPerSecond){
+          distancesGenerated = 0;
+           await sleep(1000);
+        }
+
+        function sleep(ms) {
+          return new Promise(resolve => setTimeout(resolve, ms));
+        }
+      }
+    }
+    console.log("resolve first promise")
+    resolve();
+  });
+}
+
+function pushToTempDistanceArr(item){
+  //console.log(item);
+  tempDistanceArr.push(item);
+}
+
+function getDistanceArr(){
+  return tempDistanceArr;
 }
 
 
