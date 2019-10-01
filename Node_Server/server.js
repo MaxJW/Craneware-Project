@@ -1,5 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const request = require('request');
 const cors = require('cors');
 var MongoClient = require('mongodb').MongoClient;
 var distance = require('google-distance-matrix');
@@ -108,8 +109,9 @@ app.post('/api/searchDRGLatestYear', async (req,res) => {
   res.send(LatestYearResult);
 });
 
-
+var userLatLon;
 app.post('/api/searchDRGLatestYearWithHospitalLocationsAndFiltering', async (req,res) => {
+  userLatLon = 0;
   if(!req.body.drg) {
       return res.status(400).send({
         success: 'false',
@@ -148,17 +150,21 @@ app.post('/api/searchDRGLatestYearWithHospitalLocationsAndFiltering', async (req
   }
 
   if(req.body.zip && req.body.zip != "null" && req.body.zip != null && req.body.zip != "undefined" && req.body.zip != undefined){
-    var promise = await calculateDistance(LatestYearResult, req.body.zip);
+    await getUserLatLon(req.body.zip);
+    var tempArr = await calculateDistance(LatestYearResult, userLatLon.lat, userLatLon.lon);
     LatestYearResult = [];
-    LatestYearResult = tempDistanceArr.slice(0);
+    LatestYearResult = tempArr.slice(0);
     console.log("Distance Calculation Zip Code")
   }else if((req.body.lat && req.body.lon) && (req.body.lat != "null" && req.body.lon != "null") && (req.body.lat != null && req.body.lon != null) && (req.body.lat != "undefined" && req.body.lon != "undefined") && (req.body.lat != undefined && req.body.lon != undefined)){
-    var userLocation = req.body.lat + "," + req.body.lon;
-    var promise = await calculateDistance(LatestYearResult, userLocation);
+    var tempArr = await calculateDistance(LatestYearResult, req.body.lat, req.body.lon);
     LatestYearResult = [];
-    LatestYearResult =  tempDistanceArr.slice(0);
+    LatestYearResult =  tempArr.slice(0);
     console.log("Distance Calculation Geolocation")
   }
+
+  function sleep(time) {
+    return new Promise(resolve => setTimeout(resolve, time))
+}
   
 
   if(req.body.distanceFlter && req.body.distanceFlter != "null" && req.body.ratingFilter != null && req.body.ratingFilter != "undefined" && req.body.ratingFilter != undefined) {
@@ -260,91 +266,176 @@ function applyRatingFilter(rating, LatestYearResult){
 }
 
 
-var tempDistanceArr = []
-function calculateDistance(LatestYearResult, userLocation,){
-  console.log("make first promise")
-  return new Promise(async resolve =>{
-    tempArr = LatestYearResult.slice(0);
-    LatestYearResult = [];
-    var destinations = [];
-    var counter = 0;
-    var counterLimit = 25;
-    var distancesGenerated = 0;
-    var limitPerSecond = 1000;
-    var arrIndex = 0;
+////Google maps integration for calculating the distance from the user to each of the hospitals
+//var tempDistanceArr = []
+//function calculateDistance(LatestYearResult, userLocation,){
+//  return new Promise(async resolve =>{
+//    tempArr = LatestYearResult.slice(0);
+//    LatestYearResult = [];
+//    var destinations = [];
+//    var counter = 0;
+//    var counterLimit = 25;
+//    var distancesGenerated = 0;
+//    var limitPerSecond = 1000;
+//    var arrIndex = 0;
+//
+//    if(tempArr.length < counterLimit){
+//      counterLimit = tempArr.length;
+//    }
+//
+//    var origins = [userLocation];
+//    for(var i=0; i<tempArr.length; i++){
+//      if(!(counter == counterLimit)){
+//        destinations.push((tempArr[i].hospital[0].lat +"," +tempArr[i].hospital[0].lon))
+//        counter++;
+//      }
+//
+//      if(counter == counterLimit){
+//        distancesGenerated = distancesGenerated+25;
+//        distance.matrix(origins, destinations, function ( err, distances) {
+//            return new Promise(resolve => {
+//              if (err) {
+//                return console.log(err);
+//              }
+//              if (!distances) {
+//                return console.log('no distances');
+//              }
+//              if (distances.status == 'OK') {
+//                for (var i = 0; i < origins.length; i++) {
+//                  for (var j = 0; j < destinations.length; j++) {
+//                    var origin = distances.origin_addresses[i];
+//                    var destination = distances.destination_addresses[j];
+//                    if (distances.rows[0].elements[j].status == 'OK') {
+//                      var distance = distances.rows[i].elements[j].distance.text;
+//                      tempDistanceArr.push(tempArr[arrIndex]);
+//                      tempDistanceArr[arrIndex].distance = distance;
+//                      pushToTempDistanceArr(tempDistanceArr);
+//                    }
+//                    else {
+//                      console.log(destination + ' is not reachable by land from ' + origin);
+//                    }
+//                  }
+//                }
+//              }
+//              counter = 0;
+//              destinations = [];
+//              resolve();
+//            });
+//          });
+//        //console.log(distancesGenerated);
+//        if(distancesGenerated == limitPerSecond){
+//          distancesGenerated = 0;
+//          await sleep(1000);
+//        }
+//
+//        function sleep(ms) {
+//          return new Promise(resolve => setTimeout(resolve, ms));
+//        }
+//      }
+//    }
+//    resolve();
+//  });
+//}
 
-    if(tempArr.length < counterLimit){
-      counterLimit = tempArr.length;
-    }
+//function pushToTempDistanceArr(item){
+//  tempDistanceArr.push(item);
+//}
 
-    var origins = [userLocation];
-    for(var i=0; i<tempArr.length; i++){
-      if(!(counter == counterLimit)){
-        destinations.push((tempArr[i].hospital[0].lat +"," +tempArr[i].hospital[0].lon))
-        counter++;
-      }
+//var distDurContainerOSRM;
+//var userLatLonOSRM;
+//app.post('/api/getDistance', async(req, res) => {
+//  if (!(req.body.hospitalLat && req.body.hospitalLon) || (!(req.body.userLat && req.body.userLon) && !req.body.userZip)) {
+//      return res.status(400).send({
+//          success: 'false',
+//          message: 'lat/lon is required'
+//      });
+//  }
+//  this.distDurContainer = null;
+//  var osrm_url_base = "http://router.project-osrm.org/route/v1/driving/";
+//  var osrm_url_options = "?alternatives=false&steps=false&overview=false";
+//  var osrm_url_request;
+//
+//  //http://router.project-osrm.org/route/v1/driving/56.469094399999996,-2.9884416;56.7752995,-2.4252721?alternatives=false&steps=false&overview=false
+//  if (!req.body.userZip) {
+//    osrm_url_request = osrm_url_base + req.body.userLon + "," + req.body.userLat + ";" + hospitalLocation + osrm_url_options;
+//  } else {
+//    getUserLatLon(req.body.userZip);
+//    osrm_url_request = osrm_url_base + userLatLonOSRM.lon + "," + userLatLonOSRM.lat + ";" + hospitalLocation + osrm_url_options;
+//  }
+//
+//  var hospitalLocation = req.body.hospitalLon + "," + req.body.hospitalLat;
+//  var self = this;
+//  //osrm_url_request = osrm_url_base + userLatLon.lon + "," + userLatLon.lat + ";" + hospitalLocation + osrm_url_options;
+//  request(osrm_url_request, { json: true }, (err, res) => {
+//      if (!(res.body.message == "Too Many Requests")) {
+//          //console.log("distance: " + res.body.routes[0].distance);
+//          //console.log("Duration: " + res.body.routes[0].duration);
+//          self.distDurContainerOSRM = {
+//              distance: (res.body.routes[0].distance * 0.000621371192),
+//              duration: (res.body.routes[0].duration / 60),
+//          }
+//      } else {
+//          console.log("Unable to load OSRM API")
+//          console.log(res.body);
+//      }
+//  })
+//  return res.status(201).send(this.distDurContainerOSRM);
+//});
 
-      if(counter == counterLimit){
-        distancesGenerated = distancesGenerated+25;
-        distance.matrix(origins, destinations, function ( err, distances) {
-          console.log("make second promise")
-            return new Promise(resolve => {
-              console.log("Print first");
-              if (err) {
-                return console.log(err);
-              }
-              if (!distances) {
-                return console.log('no distances');
-              }
-              if (distances.status == 'OK') {
-                for (var i = 0; i < origins.length; i++) {
-                  for (var j = 0; j < destinations.length; j++) {
-                    var origin = distances.origin_addresses[i];
-                    var destination = distances.destination_addresses[j];
-                    if (distances.rows[0].elements[j].status == 'OK') {
-                      var distance = distances.rows[i].elements[j].distance.text;
-                      console.log("Print second");
-                      //console.log('Distance from ' + origin + ' to ' + destination + ' is ' + distance);
-                      tempDistanceArr.push(tempArr[arrIndex]);
-                      tempDistanceArr[arrIndex].distance = distance;
-                      pushToTempDistanceArr(tempDistanceArr);
-                    }
-                    else {
-                      console.log(destination + ' is not reachable by land from ' + origin);
-                    }
-                  }
-                }
-              }
-              counter = 0;
-              destinations = [];
-              console.log("resolve second promise")
-              resolve();
-            });
-          });
-        //console.log(distancesGenerated);
-        if(distancesGenerated == limitPerSecond){
-          distancesGenerated = 0;
-           await sleep(1000);
+var userLatLon;
+function calculateDistance(LatestYearResult, userLat, userLon){
+  const earthRadius = 6378.137;
+  const userLatRad = convertDegToRad(userLat);
+  const userLonRad = convertDegToRad(userLon);
+  tempArr = LatestYearResult.slice(0);
+  LatestYearResult = [];
+  for(var i=0; i<tempArr.length; i++){
+    var hospitalLatRad = convertDegToRad(tempArr[i].hospital[0].lat);
+    var hospitalLonRad = convertDegToRad(tempArr[i].hospital[0].lon);
+    var dLat = hospitalLatRad - userLatRad;
+    var dLon = hospitalLonRad - userLonRad;
+    var haversine = Math.sin(dLat/2) * Math.sin(dLat/2) + Math.cos(userLatRad) * Math.cos(hospitalLatRad) * Math.sin(dLon/2) * Math.sin(dLon/2);
+    var angle = 2 * Math.atan2(Math.sqrt(haversine), Math.sqrt(1-haversine));
+    var distance = (earthRadius * angle) * 0.621371192;  
+    tempArr[i].distance = distance;
+    console.log("distance", distance);
+    LatestYearResult.push(tempArr[i]);
+  }
+  return LatestYearResult;
+}
+
+function convertDegToRad(number){
+  return (number * (Math.PI/180));
+}
+
+
+
+function getUserLatLon(zipcode) {
+  console.log(zipcode);
+  var self = this;
+  var userZip = zipcode;
+  var baseUrl = "http://nominatim.openstreetmap.org/search?postalcode=";
+  var urlOptions = "&format=json";
+  var requestUrl = baseUrl + userZip + urlOptions;
+  return new Promise(function(resolve, reject) {
+    request(requestUrl, { json: true }, (err, res) => {
+        var temp = res.body
+
+        if (!(temp.length <= 0)) {
+          self.userLatLon = {
+              lat: res.body[0].lat,
+              lon: res.body[0].lon,
+          }
+
+          userLatLon = self.userLatLon;
+          resolve(self.userLatLon);
         }
-
-        function sleep(ms) {
-          return new Promise(resolve => setTimeout(resolve, ms));
-        }
-      }
-    }
-    console.log("resolve first promise")
-    resolve();
-  });
+    });
+  });  
 }
 
-function pushToTempDistanceArr(item){
-  //console.log(item);
-  tempDistanceArr.push(item);
-}
 
-function getDistanceArr(){
-  return tempDistanceArr;
-}
+
 
 
 
