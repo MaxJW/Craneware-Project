@@ -25,7 +25,7 @@ export class SearchformComponent implements OnInit {
   rating;
   location;
   lat;
-  lng;
+  lon;
   options: string[] = ['001 - HEART TRANSPLANT OR IMPLANT OF HEART ASSIST SYSTEM WITH MCC',
     '002 - HEART TRANSPLANT OR IMPLANT OF HEART ASSIST SYSTEM WITHOUT MCC',
     '003 - ECMO OR TRACHEOSTOMY WITH MV >96 HOURS OR PDX EXCEPT FACE, MOUTH AND NECK WITH MAJOR O.R. PROCEDURE',
@@ -799,12 +799,12 @@ export class SearchformComponent implements OnInit {
       if (this.existsInArray()) {
         this.error = 'false';
         if (this.geolocationChecked) {
-          this.getGeoLocation();
+          await this.getGeoLocation();
           this.location = undefined;
         } else {
           this.location = this.zipCodeControl.value;
         }
-        await this.httpService.sendPostGetAllData(this.searchControl.value.substring(0, 3), this.distance, this.price, this.rating);/*, this.distance, this.price, this.rating, this.lat, this.lng, this.location);*/
+        await this.httpService.sendPostGetAllData(this.searchControl.value.substring(0, 3), this.distance, this.price, this.rating, this.location, this.lat, this.lon);/*, this.distance, this.price, this.rating, this.lat, this.lng, this.location);*/
         this.setSearched();
       } else {
         this.error = 'exist';
@@ -819,17 +819,21 @@ export class SearchformComponent implements OnInit {
   }
 
   getGeoLocation() {
-    var self = this;
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(function (position) {
-        self.lat = position.coords.latitude;
-        self.lng = position.coords.longitude;
-      }, function () {
-        console.log("Error getting location");
-      });
-    } else {
-      console.log("Browser does not support geolocation.");
-    }
+    return new Promise(resolve =>
+    {
+      var self = this;
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(function (position) {
+          self.lat = position.coords.latitude;
+          self.lon = position.coords.longitude;
+          resolve();
+        }, function () {
+          console.log("Error getting location");
+        });
+      } else {
+        console.log("Browser does not support geolocation.");
+      }
+    });
   }
 
   searchGet() {
