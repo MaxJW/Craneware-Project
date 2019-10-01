@@ -9,8 +9,8 @@ export class HttpService{
   searchDrgUrl: string = 'http://104.248.165.91:8000/api/searchDRG';
   searchDrgLatestYearUrl: string = 'http://104.248.165.91:8000/api/searchDRGLatestYear';
   searchDRGLatestYearWithHospitalLocationsAndFiltering: string = 'http://104.248.165.91:8000/api/searchDRGLatestYearWithHospitalLocationsAndFiltering';
-  //addNewCondition: string = 'http://104.248.165.91:8000/api/addNewCondition';
-  addNewCondition: string = 'http://localhost:8000/api/addNewCondition';
+  addNewCondition: string = 'http://104.248.165.91:8000/api/addNewCondition';
+  //addNewCondition: string = 'http://localhost:8000/api/addNewCondition';
   getbaseUrl: string = 'http://104.248.165.91:8000/';
 
   public responce: any;
@@ -62,10 +62,11 @@ export class HttpService{
     if(zipCode === undefined){
       zipCode = null;
     }
+    console.log(distance);
     const body = new HttpParams({
       fromObject: {
         drg: data,
-        distanceFlter: distance,
+        distanceFilter: distance,
         priceFilter: price,
         ratingFilter: rating,
         zip: zipCode,

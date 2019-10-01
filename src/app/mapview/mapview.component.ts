@@ -80,7 +80,7 @@ export class MapviewComponent implements OnInit {
     }
 
     for (var loop = 0; loop < resultstoget; loop++) {
-      myquery = this.searchData[loop].providerName + ", " + this.searchData[loop].providerStreetAddress + ", " + this.searchData[loop].providerCity + ", " + this.searchData[loop].providerState + " " + this.searchData[loop].providerZipCode;
+      myquery = this.searchData[loop].providerName + ', ' + this.searchData[loop].providerStreetAddress + ', ' + this.searchData[loop].providerCity + ', ' + this.searchData[loop].providerState + ' ' + this.searchData[loop].providerZipCode;
       request = {
         query: myquery,
         fields: ['name', 'geometry'],
@@ -112,12 +112,12 @@ export class MapviewComponent implements OnInit {
           var curr_location = new google.maps.Marker({
             map: self.map,
             position: new google.maps.LatLng(self.pos.lat, self.pos.lng),
-            title: "Current Location",
+            title: 'Current Location',
             icon: image,
           });
 
           google.maps.event.addListener(curr_location, 'click', function () {
-            self.infowindow.setContent("Current Location");
+            self.infowindow.setContent('Current Location');
             self.infowindow.open(self.map, this);
           });
 
@@ -164,8 +164,10 @@ export class MapviewComponent implements OnInit {
       self.infowindow.setContent(
         `<div class="infowindow_content">` +
         `<h3>` + hospital.providerName + `</h3><hr style="margin: 4px 0"/>` +
-        `<p style="font-size: 0.9rem"><b>Uninsured Price: </b>$` + (parseFloat(hospital.averageCoveredCharges).toFixed(2)).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + `</p>` +
-        `<p style="font-size: 0.9rem"><b>Medicare Price: </b>$` + (parseFloat(hospital.averageMedicareCustomerPayments).toFixed(2)).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + `</p>` +
+        `<p style="font-size: 0.9rem"><b>Uninsured Price: </b>$` + (parseFloat(hospital.averageCoveredCharges).toFixed(2)).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') + `</p>` +
+        `<p style="font-size: 0.9rem"><b>Medicare Price: </b>$` + (parseFloat(hospital.averageMedicareCustomerPayments).toFixed(2)).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') + `</p>` +
+        `<p style="font-size: 0.9rem"><b>Rating: </b>` + location.rating + '⭐' + `</p>` +
+        `<p style="font-size: 0.9rem"><b>Distance: </b>` + ((hospital.distance).toFixed(2)).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') + ' miles' + `</p>` +
         `</div>`
        // `<p style="font-size: 0.9rem"><b>Distance: </b>` + self.distanceData[result].distance + `</p>` +
       );
@@ -174,7 +176,7 @@ export class MapviewComponent implements OnInit {
   }
 
   centerMapPlease(data) {
-    console.log("Centering!", data)
+    console.log('Centering!', data)
   }
 
   handleLocationError(browserHasGeolocation, infoWindow, pos) {
@@ -208,9 +210,9 @@ export class MapviewComponent implements OnInit {
           let desti = response.destinationAddresses;
           for (let k = 0; k < ori.length; k++) {
             let results = response.rows[k].elements;
-            if(results[0].status == "ZERO_RESULTS"){
+            if(results[0].status == 'ZERO_RESULTS'){
               return;
-            }else if (results[0].status == "OK"){
+            }else if (results[0].status == 'OK'){
               for (let j = 0; j < results.length; j++) {
               const travel = {
                 providerId: providerId,
