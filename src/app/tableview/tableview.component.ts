@@ -16,7 +16,7 @@ export class TableviewComponent implements OnInit {
   private searchDataSub: Subscription;
   constructor(public dataService: DataService) { }
 
-  displayedColumns: string[] = ['providerName', 'providerStreetAddress', 'providerCity', 'providerState', 'providerZipCode', 'hospital[0].rating', 'averageCoveredCharges', 'averageMedicareCustomerPayments'];
+  displayedColumns: string[] = ['providerName', 'providerStreetAddress', 'providerCity', 'providerState', 'providerZipCode', 'hospital[0].rating', 'averageCoveredCharges', 'averageMedicareCustomerPayments','distance'];
   dataSource = new MatTableDataSource(this.dataService.getSearchData());
   @ViewChild(MatSort, {static: true}) sort: MatSort;
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
