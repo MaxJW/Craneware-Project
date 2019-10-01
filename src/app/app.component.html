@@ -6,7 +6,6 @@
         <app-searchform (searchToggle)="toggleSearched($event)" (geolocationToggle)="geolocationEnabled($event)" [@slideAdjust]=hasSearched></app-searchform>
         <app-mapview *ngIf="hasSearched" [geotoggleEnabled]="geotoggleVal" [@slideIn]></app-mapview>
         <app-tableview (mapSelection)="mapSelected($event)" *ngIf="hasSearched" [@slideIn]></app-tableview>
-        <app-distancetable *ngIf="hasSearched" [@slideIn]></app-distancetable>
     </span>
     <app-loginform (loginHide)="loginHider($event)" *ngIf="loginform && !loginSuccess"></app-loginform>
     <span *ngIf="loginSuccess">

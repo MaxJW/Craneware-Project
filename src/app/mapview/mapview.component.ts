@@ -71,7 +71,7 @@ export class MapviewComponent implements OnInit {
     //Search for first three received hospitals and place markers on map
     var request;
     var myquery;
-    var resultstoget = 3; // !!!!!!! RESULTS TO GET VALUE !!!!!!!!!
+    var resultstoget = 50; // !!!!!!! RESULTS TO GET VALUE !!!!!!!!!
 
     self.distances = [];
 
@@ -80,14 +80,13 @@ export class MapviewComponent implements OnInit {
     }
 
     for (var loop = 0; loop < resultstoget; loop++) {
-      myquery = this.searchData[loop].providerName + ", " + this.searchData[loop].providerStreetAddress + ", " + this.searchData[loop].providerCity + ", " + this.searchData[loop].providerState + " " + this.searchData[loop].providerZipCode;
+      myquery = this.searchData[loop].providerName + ', ' + this.searchData[loop].providerStreetAddress + ', ' + this.searchData[loop].providerCity + ', ' + this.searchData[loop].providerState + ' ' + this.searchData[loop].providerZipCode;
       request = {
         query: myquery,
         fields: ['name', 'geometry'],
       };
-      //console.log(self.findPlaceFromQuery(request, resultstoget, loop));
-      //distances.push(self.findPlaceFromQuery(request, resultstoget, loop));
-      self.findPlaceFromQuery(request, resultstoget, loop)
+
+      this.createMarker(this.searchData[loop].hospital[0], this.searchData[loop]);
     }
     self.dataService.setDistanceData(self.distances);
   }
@@ -113,12 +112,12 @@ export class MapviewComponent implements OnInit {
           var curr_location = new google.maps.Marker({
             map: self.map,
             position: new google.maps.LatLng(self.pos.lat, self.pos.lng),
-            title: "Current Location",
+            title: 'Current Location',
             icon: image,
           });
 
           google.maps.event.addListener(curr_location, 'click', function () {
-            self.infowindow.setContent("Current Location");
+            self.infowindow.setContent('Current Location');
             self.infowindow.open(self.map, this);
           });
 
@@ -148,15 +147,14 @@ export class MapviewComponent implements OnInit {
     });
   }
 
-  createMarker(place: any, result: any) {
+  createMarker(location, hospital) {
+    console.log();
     var marker = new google.maps.Marker({
       map: this.map,
-      position: place.geometry.location,
-      title: place.name,
+      position: {lat: location.lat, lng: location.lon},
+      title: hospital.providerName,
       animation: google.maps.Animation.DROP,
     });
-
-    //console.log(this.distanceData);
 
     this.counter++;
     console.log(this.counter);
@@ -165,17 +163,20 @@ export class MapviewComponent implements OnInit {
     google.maps.event.addListener(marker, 'click', function () {
       self.infowindow.setContent(
         `<div class="infowindow_content">` +
-        `<h3>` + self.searchData[result].providerName + `</h3><hr style="margin: 4px 0"/>` +
-        `<p style="font-size: 0.9rem"><b>Price: </b>` + self.searchData[result].averageTotalPayments + `</p>` +
-        `<p style="font-size: 0.9rem"><b>Distance: </b>` + self.distanceData[result].distance + `</p>` +
+        `<h3>` + hospital.providerName + `</h3><hr style="margin: 4px 0"/>` +
+        `<p style="font-size: 0.9rem"><b>Uninsured Price: </b>$` + (parseFloat(hospital.averageCoveredCharges).toFixed(2)).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') + `</p>` +
+        `<p style="font-size: 0.9rem"><b>Medicare Price: </b>$` + (parseFloat(hospital.averageMedicareCustomerPayments).toFixed(2)).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') + `</p>` +
+        `<p style="font-size: 0.9rem"><b>Rating: </b>` + location.rating + '⭐' + `</p>` +
+        `<p style="font-size: 0.9rem"><b>Distance: </b>` + ((hospital.distance).toFixed(2)).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') + ' miles' + `</p>` +
         `</div>`
+       // `<p style="font-size: 0.9rem"><b>Distance: </b>` + self.distanceData[result].distance + `</p>` +
       );
       self.infowindow.open(self.map, this);
     });
   }
 
   centerMapPlease(data) {
-    console.log("Centering!", data)
+    console.log('Centering!', data)
   }
 
   handleLocationError(browserHasGeolocation, infoWindow, pos) {
@@ -188,25 +189,6 @@ export class MapviewComponent implements OnInit {
 
   sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
-  }
-
-  async findPlaceFromQuery(request, resultstoget, loop) {
-    if(this.counter == 10){
-      await this.sleep(1000);
-      this.counter = 0;
-    }
-    var self = this;
-    self.service.findPlaceFromQuery(request, async function (results, status) {
-      self.counter++;
-      if (status === google.maps.places.PlacesServiceStatus.OK) {
-        for (var i = 0; i < results.length; i++) {
-          //console.log(results[i]);
-          self.createMarker(results[i], loop);
-          await self.calculateDistance(results[i], self.searchData[loop].providerId, self.searchData[loop].providerName);
-          //console.log(await self.calculateDistance(results[i], self.searchData[loop].providerId));
-        }
-      }
-    });
   }
 
   async calculateDistance(location, providerId, providerName) {
@@ -228,9 +210,9 @@ export class MapviewComponent implements OnInit {
           let desti = response.destinationAddresses;
           for (let k = 0; k < ori.length; k++) {
             let results = response.rows[k].elements;
-            if(results[0].status == "ZERO_RESULTS"){
+            if(results[0].status == 'ZERO_RESULTS'){
               return;
-            }else if (results[0].status == "OK"){
+            }else if (results[0].status == 'OK'){
               for (let j = 0; j < results.length; j++) {
               const travel = {
                 providerId: providerId,

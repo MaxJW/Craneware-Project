@@ -13,7 +13,6 @@ import { AppComponent } from './app.component';
 import { SearchformComponent } from './searchform/searchform.component';
 import { MapviewComponent } from './mapview/mapview.component';
 import { TableviewComponent } from './tableview/tableview.component';
-import { DistancetableComponent } from './distancetable/distancetable.component';
 import { LoginformComponent } from './loginform/loginform.component';
 import {MatCardModule} from '@angular/material/card';
 import { AddConditionComponent } from './add-condition/add-condition.component';
@@ -25,7 +24,6 @@ import {MatSelectModule} from '@angular/material/select';
     SearchformComponent,
     MapviewComponent,
     TableviewComponent,
-    DistancetableComponent,
     LoginformComponent,
     AddConditionComponent
   ],
