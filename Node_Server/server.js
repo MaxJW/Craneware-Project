@@ -135,7 +135,7 @@ app.post('/api/searchDRGLatestYearWithHospitalLocationsAndFiltering', async (req
   results[results.length-1].averageMedicareCustomerPayments = (results[results.length-1].averageTotalPayments - results[results.length-1].averageMedicarePayments);
   LatestYearResult.push(results[results.length-1]);
 
-  if(req.body.priceFilter && req.body.priceFilter != "null" && req.body.ratingFilter != null && req.body.ratingFilter != "undefined" && req.body.ratingFilter != undefined) {
+  if(req.body.priceFilter && req.body.priceFilter != "null" && req.body.priceFilter != null && req.body.priceFilter != "undefined" && req.body.priceFilter != undefined) {
     var tempArr = await applyPriceFilter(req.body.priceFilter, LatestYearResult);
     LatestYearResult = [];
     LatestYearResult = tempArr.slice(0);
@@ -162,18 +162,13 @@ app.post('/api/searchDRGLatestYearWithHospitalLocationsAndFiltering', async (req
     console.log("Distance Calculation Geolocation")
   }
 
-  function sleep(time) {
-    return new Promise(resolve => setTimeout(resolve, time))
-}
-  
-
-  if(req.body.distanceFlter && req.body.distanceFlter != "null" && req.body.ratingFilter != null && req.body.ratingFilter != "undefined" && req.body.ratingFilter != undefined) {
-    var tempArr = await applyDistanceFilter(req.body.distanceFlter, LatestYearResult);
+  if(req.body.distanceFilter && req.body.distanceFilter != "null" && req.body.distanceFilter != null && req.body.distanceFilter != "undefined" && req.body.distanceFilter != undefined) {
+    var tempArr = await applyDistanceFilter(req.body.distanceFilter, LatestYearResult);
     LatestYearResult = [];
+    console.log(req.body.distanceFilter);
     LatestYearResult = tempArr.slice(0);
     console.log("distance Filter")
   }
-
 
   client.close();
   res.send(LatestYearResult);
@@ -183,10 +178,37 @@ app.post('/api/searchDRGLatestYearWithHospitalLocationsAndFiltering', async (req
 function applyDistanceFilter(distance, LatestYearResult){
   tempArr = LatestYearResult.slice(0);
   LatestYearResult = [];
-  for(var i=0; i<tempArr.length; i++){
-    //if(parseFloat(tempArr[i].averageCoveredCharges) || parseFloat(tempArr[i].averageMedicareCustomerPayments))
+  if(distance == "100"){
+    for(var i=0; i<tempArr.length; i++){
+      if(parseFloat(tempArr[i].distance) <= 100){
+        LatestYearResult.push(tempArr[i])
+      }
+    }
+    return LatestYearResult;
+  }else if(distance == "500"){
+    for(var i=0; i<tempArr.length; i++){
+      if(parseFloat(tempArr[i].distance) <= 500){
+        LatestYearResult.push(tempArr[i])
+      }
+    }
+    return LatestYearResult;
+  }else if(distance == "1000"){
+    for(var i=0; i<tempArr.length; i++){
+      if(parseFloat(tempArr[i].distance) <= 1000){
+        LatestYearResult.push(tempArr[i])
+      }
+    }
+    return LatestYearResult;
+  }else if(distance == "5000"){
+    for(var i=0; i<tempArr.length; i++){
+      if(parseFloat(tempArr[i].distance) <= 5000){
+        LatestYearResult.push(tempArr[i])
+      }
+    }
+    return LatestYearResult;
   }
 }
+
 
 function applyPriceFilter(price, LatestYearResult){
   tempArr = LatestYearResult.slice(0);
