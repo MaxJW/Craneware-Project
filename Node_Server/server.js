@@ -457,6 +457,24 @@ function getUserLatLon(zipcode) {
 }
 
 
+app.post('/api/locationLookup', async (req,res) => {
+  if(!req.body.zip) {
+      return res.status(400).send({
+        success: 'false',
+        message: 'zip code is required'
+      });
+  }
+  
+  await getUserLatLon(req.body.zip);
+  var userLocation = {
+    lat: userLatLon.lat,
+    lon: userLatLon.lon,
+  }
+  
+  return res.status(201).send(userLocation);
+});
+
+
 
 
 
@@ -469,7 +487,7 @@ function getUserLatLon(zipcode) {
 app.post('/api/addNewCondition', async function(req,res){
   const client = await dbConnect();
   console.log("inserting");
-  await client.db(dbConfig.name).collection("DRG").insertOne(req.body);
-  res.send('Data received:\n' + JSON.stringify(req.body));
+  let results = await client.db(dbConfig.name).collection("DRG").insertOne(req.body);
+  res.status(201).send(results);
   client.close();
 })

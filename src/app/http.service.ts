@@ -10,6 +10,7 @@ export class HttpService{
   searchDrgLatestYearUrl: string = 'http://104.248.165.91:8000/api/searchDRGLatestYear';
   searchDRGLatestYearWithHospitalLocationsAndFiltering: string = 'http://104.248.165.91:8000/api/searchDRGLatestYearWithHospitalLocationsAndFiltering';
   addNewCondition: string = 'http://104.248.165.91:8000/api/addNewCondition';
+  locationLookupUrl: string = 'http://104.248.165.91:8000/api/locationLookup';
   //addNewCondition: string = 'http://localhost:8000/api/addNewCondition';
   getbaseUrl: string = 'http://104.248.165.91:8000/';
 
@@ -31,6 +32,23 @@ export class HttpService{
 
     return this.http
       .post(this.searchDrgLatestYearUrl, body, { headers }).toPromise().then(res => { this.responce = res, this.dataService.setSearchData(this.responce); } );
+      // .subscribe(res => this.responce = res);
+  }
+
+  sendPostUserLocation(data: string) {
+    console.log("sending req")
+    const headers = new HttpHeaders()
+      .set('cache-control', 'no-cache')
+      .set('content-type', 'application/x-www-form-urlencoded');
+
+    const body = new HttpParams({
+      fromObject: {
+        zip: data,
+      }
+    });
+
+    return this.http
+      .post(this.locationLookupUrl, body, { headers }).toPromise().then(res => { this.responce = res, this.dataService.setUserLocationData(this.responce); } );
       // .subscribe(res => this.responce = res);
   }
 

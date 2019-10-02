@@ -5,6 +5,8 @@ import { Subject } from 'rxjs';
 export class DataService{
   private searchData;
   private searchDataUpdated = new Subject();
+  private userLocationData;
+  private userLocationDataUpdated = new Subject();
 
   setSearchData(response){
     this.searchData = response;
@@ -19,4 +21,19 @@ export class DataService{
     // return an onject that we can listen but not emitt
     return this.searchDataUpdated.asObservable();
   }
+
+  setUserLocationData(response){
+    this.userLocationData = response;
+    this.userLocationDataUpdated.next([...this.userLocationData]);
+  }
+
+  getUserLocationData(){
+    return [...this.userLocationData];
+  }
+
+  getUserLocationDataListener() {
+    // return an onject that we can listen but not emitt
+    return this.userLocationDataUpdated.asObservable();
+  }
+  
 }
