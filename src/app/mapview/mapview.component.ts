@@ -23,9 +23,7 @@ export class MapviewComponent implements OnInit {
   counter: number = 0;
   //Database get
   searchData;
-  distanceData;
   private searchDataSub: Subscription;
-  private distanceDataSub: Subscription;
   constructor(public dataService: DataService) { }
   distances = [];
   pos = { lat: 0, lng: 0 };
@@ -39,12 +37,6 @@ export class MapviewComponent implements OnInit {
         this.searchData = searchData;
         console.log(this.searchData);
         this.initMap();
-      });
-      console.log(this.searchData);
-    this.distanceData = this.dataService.getDistanceData();
-    this.distanceDataSub = this.dataService.getDistanceDataUpdateListener()
-      .subscribe((distanceData) => {
-        this.distanceData = distanceData;
       });
 
     this.initMap();
@@ -88,7 +80,6 @@ export class MapviewComponent implements OnInit {
 
       this.createMarker(this.searchData[loop].hospital[0], this.searchData[loop]);
     }
-    self.dataService.setDistanceData(self.distances);
   }
 
   createGeolocationMarker() {
@@ -131,6 +122,35 @@ export class MapviewComponent implements OnInit {
         // Browser doesn't support Geolocation
         this.handleLocationError(false, this.infowindow, this.map.getCenter());
       }
+    } else {
+      //Get ZipCode Location coords
+      /*self.pos = {
+        lat: position.coords.latitude,
+        lng: position.coords.longitude
+      };
+
+      var image = {
+        url: '/assets/icon.png',
+        size: new google.maps.Size(30, 30),
+        origin: new google.maps.Point(0, 0),
+        anchor: new google.maps.Point(15, 15)
+      };
+
+      var curr_location = new google.maps.Marker({
+        map: self.map,
+        position: new google.maps.LatLng(self.pos.lat, self.pos.lng),
+        title: 'Current Location',
+        icon: image,
+      });
+
+      google.maps.event.addListener(curr_location, 'click', function () {
+        self.infowindow.setContent('Current Location');
+        self.infowindow.open(self.map, this);
+      });
+
+      self.map.setCenter(new google.maps.LatLng(self.pos.lat, self.pos.lng));
+      self.map.setZoom(6);
+      self.createRadius();*/
     }
   }
 
@@ -169,7 +189,6 @@ export class MapviewComponent implements OnInit {
         `<p style="font-size: 0.9rem"><b>Rating: </b>` + location.rating + '⭐' + `</p>` +
         `<p style="font-size: 0.9rem"><b>Distance: </b>` + ((hospital.distance).toFixed(2)).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') + ' miles' + `</p>` +
         `</div>`
-       // `<p style="font-size: 0.9rem"><b>Distance: </b>` + self.distanceData[result].distance + `</p>` +
       );
       self.infowindow.open(self.map, this);
     });
@@ -224,8 +243,6 @@ export class MapviewComponent implements OnInit {
               };
               this.distances.push(travel);
               console.log(providerId + ': ' + ori[k] + ' to ' + desti[j] + ': ' + results[j].distance.text + ' in ' + results[j].duration.text);
-              // this.dataService.setDistanceData(travel);
-              // console.log(providerId +': ' + ori[k] + ' to ' + desti[j] + ': ' + results[j].distance.text + ' in ' + results[j].duration.text);
             }
             }
             //console.log(results[0].status);

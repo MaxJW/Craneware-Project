@@ -7,13 +7,6 @@
     -moz-osx-font-smoothing: grayscale;
 }
 
-.img-fill {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    z-index: -99;
-}
-
 .main,
 .notAdmin {
     position: relative;

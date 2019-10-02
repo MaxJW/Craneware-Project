@@ -1,8 +1,8 @@
-<div class="img-fill"></div>
+<app-help-button></app-help-button>
 <div class="main">
     <span class="notAdmin" *ngIf="!loginform"> <!-- When you remove the addconditon from the main page, remove the last > and add "&& !add-conditon>" to the end ty -->
         <ng-keyboard-shortcuts [shortcuts]="shortcuts"></ng-keyboard-shortcuts>
-        <h1 [@slideAdjust]=hasSearched>What's wrong?</h1>
+        <h1 [@slideAdjust]=hasSearched>Price Doctor</h1>
         <app-searchform (searchToggle)="toggleSearched($event)" (geolocationToggle)="geolocationEnabled($event)" [@slideAdjust]=hasSearched></app-searchform>
         <app-mapview *ngIf="hasSearched" [geotoggleEnabled]="geotoggleVal" [@slideIn]></app-mapview>
         <app-tableview (mapSelection)="mapSelected($event)" *ngIf="hasSearched" [@slideIn]></app-tableview>
