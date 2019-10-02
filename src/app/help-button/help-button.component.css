@@ -2,7 +2,7 @@
     position: absolute;
     top: 0;
     right: 0;
-    margin: 10px;
+    margin: 12px;
     z-index: 99;
 }
 
@@ -15,11 +15,12 @@ a {
 }
 
 img {
+    width: 35px;
     opacity: 1;
 }
 
 img:hover {
-    opacity: 0.3;
+    opacity: 0.5;
 }
 
 .help-dropdown {
@@ -33,25 +34,29 @@ img:hover {
     border-radius: .4em;
     width: 500px;
     color: white;
-    padding: 5px;
+    padding: 8px;
 }
 
 .speech-bubble:after {
 	content: '';
 	position: absolute;
 	top: 0;
-	left: 95%;
+	left: 96.5%;
 	width: 0;
 	height: 0;
-	border: 10px solid transparent;
+	border: 8px solid transparent;
 	border-bottom-color: rgb(0, 0, 0, 0.8);
 	border-top: 0;
-	margin-left: -10px;
-	margin-top: -10px;
+	margin-left: -8px;
+	margin-top: -8px;
 }
 
 @media only screen and (max-width: 550px) {
     .speech-bubble {
         width: 250px;
+    }
+
+    .speech-bubble:after {
+        left: 94%;
     }
 }
