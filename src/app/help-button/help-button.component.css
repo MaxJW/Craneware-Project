@@ -1,0 +1,57 @@
+:host {
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin: 10px;
+    z-index: 99;
+}
+
+#question {
+    margin-bottom: 5px;
+}
+
+a {
+    color: white;
+}
+
+img {
+    opacity: 1;
+}
+
+img:hover {
+    opacity: 0.3;
+}
+
+.help-dropdown {
+    position: absolute;
+    right: 0;
+}
+
+.speech-bubble {
+	position: relative;
+	background: rgb(0, 0, 0, 0.8);
+    border-radius: .4em;
+    width: 500px;
+    color: white;
+    padding: 5px;
+}
+
+.speech-bubble:after {
+	content: '';
+	position: absolute;
+	top: 0;
+	left: 95%;
+	width: 0;
+	height: 0;
+	border: 10px solid transparent;
+	border-bottom-color: rgb(0, 0, 0, 0.8);
+	border-top: 0;
+	margin-left: -10px;
+	margin-top: -10px;
+}
+
+@media only screen and (max-width: 550px) {
+    .speech-bubble {
+        width: 250px;
+    }
+}

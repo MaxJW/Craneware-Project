@@ -17,6 +17,7 @@ import { LoginformComponent } from './loginform/loginform.component';
 import {MatCardModule} from '@angular/material/card';
 import { AddConditionComponent } from './add-condition/add-condition.component';
 import {MatSelectModule} from '@angular/material/select';
+import { HelpButtonComponent } from './help-button/help-button.component';
 
 @NgModule({
   declarations: [
@@ -25,7 +26,8 @@ import {MatSelectModule} from '@angular/material/select';
     MapviewComponent,
     TableviewComponent,
     LoginformComponent,
-    AddConditionComponent
+    AddConditionComponent,
+    HelpButtonComponent
   ],
   imports: [
     BrowserModule,
