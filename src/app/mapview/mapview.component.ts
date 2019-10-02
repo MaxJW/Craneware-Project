@@ -122,6 +122,35 @@ export class MapviewComponent implements OnInit {
         // Browser doesn't support Geolocation
         this.handleLocationError(false, this.infowindow, this.map.getCenter());
       }
+    } else {
+      //Get ZipCode Location coords
+      /*self.pos = {
+        lat: position.coords.latitude,
+        lng: position.coords.longitude
+      };
+
+      var image = {
+        url: '/assets/icon.png',
+        size: new google.maps.Size(30, 30),
+        origin: new google.maps.Point(0, 0),
+        anchor: new google.maps.Point(15, 15)
+      };
+
+      var curr_location = new google.maps.Marker({
+        map: self.map,
+        position: new google.maps.LatLng(self.pos.lat, self.pos.lng),
+        title: 'Current Location',
+        icon: image,
+      });
+
+      google.maps.event.addListener(curr_location, 'click', function () {
+        self.infowindow.setContent('Current Location');
+        self.infowindow.open(self.map, this);
+      });
+
+      self.map.setCenter(new google.maps.LatLng(self.pos.lat, self.pos.lng));
+      self.map.setZoom(6);
+      self.createRadius();*/
     }
   }
 
