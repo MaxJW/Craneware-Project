@@ -819,14 +819,18 @@ export class AddConditionComponent implements OnInit {
     console.log('New condition submitted', data);
     this.httpService.createCondition(data)
       .subscribe(
-        d => console.log("Success", d),
-        err => console.log("Errorr", err)
-        );
-        Swal.fire(
+        d => Swal.fire(
           'Good job!',
           'Data submitted to database',
           'success'
+        ),
+        err => Swal.fire(
+          'Error Occured',
+          'Data not submitted correctly',
+          'error'
         )
+        
+        );
     this.addConditionForm.reset();
   }
 
