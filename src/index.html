@@ -3,7 +3,8 @@
 
 <head>
     <meta charset="utf-8">
-    <title>Craneware Project</title>
+    <title>Price Doctor</title>
+    <meta name="description" content="Application for comparing DRG Price Data">
     <base href="/">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="icon" type="image/x-icon" href="assets/favicon.ico">
@@ -18,7 +19,7 @@
                 align-items: center;
                 height: 100vh;
             }
-            
+
             .sbl-circ-path {
                 height: 48px;
                 width: 48px;
@@ -30,18 +31,19 @@
                 margin-left: 33%;
                 animation: rotate 1s linear infinite;
             }
-            
+
             h2 {
                 color: #ffffff;
                 font-family: sans-serif;
                 font-size: 2.5em;
                 text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
             }
-            
+
             @keyframes rotate {
                 0% {
                     transform: rotate(0);
                 }
+
                 100% {
                     transform: rotate(360deg);
                 }
@@ -54,8 +56,15 @@
             </ul>
         </div>
     </app-root>
-    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC-AU5MWo4Z5E5NcWG26jy2VRCdclv15oY&libraries=places" type="text/javascript"></script>
+    <script async defer
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC-AU5MWo4Z5E5NcWG26jy2VRCdclv15oY&libraries=places"
+        type="text/javascript"></script>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <script type="text/javascript">
+        var images = ['doctors.jpg', 'hospitalroom.jpg', 'operationroom.jpg', 'stethescopebackground.jpg', 'stethoscope.jpg', 'twochairs.jpg'];
+        document.body.style.backgroundSize = 'cover';
+        document.body.style.backgroundImage = 'linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0)), url(assets/' + images[Math.floor(Math.random() * images.length)] + ')';
+    </script>
 </body>
 
 </html>
