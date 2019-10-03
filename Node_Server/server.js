@@ -462,7 +462,7 @@ function getUserLatLon(zipcode) {
   console.log(zipcode);
   var self = this;
   var userZip = zipcode;
-  var baseUrl = "http://nominatim.openstreetmap.org/search?postalcode=";
+  var baseUrl = "http://nominatim.openstreetmap.org/search?countrycodes=us&postalcode=";
   var urlOptions = "&format=json";
   var requestUrl = baseUrl + userZip + urlOptions;
   return new Promise(function(resolve, reject) {
