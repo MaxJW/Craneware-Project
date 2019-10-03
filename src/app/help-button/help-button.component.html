@@ -1,4 +1,5 @@
-<img id="question" class="icon" (click)="enableShow()" src="../../assets/question.png">
+<span (mouseenter)="enableShow(true)" (mouseleave)="enableShow(false)">
+<img id="question" class="icon" src="../../assets/question.png">
 <div class="help-dropdown" *ngIf="showHelp">
     <div class="speech-bubble">
         <!--
@@ -15,3 +16,4 @@
         </p>
     </div>
 </div>
+</span>
