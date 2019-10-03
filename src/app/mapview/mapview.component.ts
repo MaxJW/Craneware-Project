@@ -74,7 +74,7 @@ export class MapviewComponent implements OnInit {
     //Search for first three received hospitals and place markers on map
     var request;
     var myquery;
-    var resultstoget = 50; // !!!!!!! RESULTS TO GET VALUE !!!!!!!!!
+    var resultstoget = 4000; // !!!!!!! RESULTS TO GET VALUE !!!!!!!!!
 
     self.distances = [];
 
