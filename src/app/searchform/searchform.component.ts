@@ -793,7 +793,7 @@ export class SearchformComponent implements OnInit {
   public loading = false;
 
   async searchPost() {
-    console.log(this.distance, this.price, this.rating)
+    //console.log(this.distance, this.price, this.rating)
     this.loading = true;
     if (this.searchControl.errors == null && (this.zipCodeControl.errors == null || this.geolocationChecked)) {
       if (this.existsInArray()) {
@@ -829,10 +829,10 @@ export class SearchformComponent implements OnInit {
           self.lon = position.coords.longitude;
           resolve();
         }, function () {
-          console.log("Error getting location");
+          //console.log("Error getting location");
         });
       } else {
-        console.log("Browser does not support geolocation.");
+        //console.log("Browser does not support geolocation.");
       }
     });
   }
@@ -855,7 +855,7 @@ export class SearchformComponent implements OnInit {
         startWith(''),
         map(value => this._filter(value))
       );
-    console.log(this.searchControl.value);
+    //console.log(this.searchControl.value);
   }
 
   private _filter(value: string): string[] {
