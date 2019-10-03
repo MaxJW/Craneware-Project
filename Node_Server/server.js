@@ -2,6 +2,9 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const request = require('request');
 const cors = require('cors');
+const https = require('https');
+const fs = require('fs');
+const forceSsl = require('express-force-ssl');
 var MongoClient = require('mongodb').MongoClient;
 var distance = require('google-distance-matrix');
 
@@ -12,14 +15,37 @@ const app = express()
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 app.use(cors({ origin: '*' }));
+app.use(forceSsl);
 
 distance.key('');
 distance.mode('driving');
 distance.units('imperial');
 
-app.listen(8000, () => {
-    console.log('Server started!')
+const key = fs.readFileSync('pricedoctorapi.key', 'utf8');
+const cert = fs.readFileSync( 'pricedoctorapiprimary.crt', 'utf8' );
+const ca = fs.readFileSync( 'ca.crt', 'utf8' );
+
+var options = {
+  key: key,
+  cert: cert,
+  ca: ca
+};
+
+app.set('forceSSLOptions', {
+  enable301Redirects: true,
+  trustXFPHeader: false,
+  httpsPort: 443,
+  sslRequiredMessage: 'SSL Required.'
 });
+
+https.createServer(options, app).listen(443, function () {
+  console.log('Server started!')
+})
+
+
+//app.listen(80, () => {
+//    console.log('Server started!')
+//});
 
 app.get('/', (req, res) => {
     res.json({"message": "Test application for mongoDB interfacing"});

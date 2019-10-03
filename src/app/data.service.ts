@@ -24,11 +24,11 @@ export class DataService{
 
   setUserLocationData(response){
     this.userLocationData = response;
-    this.userLocationDataUpdated.next([...this.userLocationData]);
+    this.userLocationDataUpdated.next(this.userLocationData);
   }
 
   getUserLocationData(){
-    return [...this.userLocationData];
+    return this.userLocationData;
   }
 
   getUserLocationDataListener() {
