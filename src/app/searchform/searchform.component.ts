@@ -803,6 +803,7 @@ export class SearchformComponent implements OnInit {
           this.location = undefined;
         } else {
           this.location = this.zipCodeControl.value;
+          await this.httpService.sendPostUserLocation(this.zipCodeControl.value);
         }
         await this.httpService.sendPostGetAllData(this.searchControl.value.substring(0, 3), this.distance, this.price, this.rating, this.location, this.lat, this.lon);/*, this.distance, this.price, this.rating, this.lat, this.lng, this.location);*/
         this.setSearched();
@@ -819,7 +820,7 @@ export class SearchformComponent implements OnInit {
   }
 
   getGeoLocation() {
-    return new Promise(resolve =>
+    return new Promise(async resolve =>
     {
       var self = this;
       if (navigator.geolocation) {

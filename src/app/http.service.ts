@@ -6,13 +6,13 @@ import { AddConditionComponent } from './add-condition/add-condition.component';
 
 @Injectable({providedIn: 'root'})
 export class HttpService{
-  searchDrgUrl: string = 'http://104.248.165.91:8000/api/searchDRG';
-  searchDrgLatestYearUrl: string = 'http://104.248.165.91:8000/api/searchDRGLatestYear';
-  searchDRGLatestYearWithHospitalLocationsAndFiltering: string = 'http://104.248.165.91:8000/api/searchDRGLatestYearWithHospitalLocationsAndFiltering';
-  addNewCondition: string = 'http://104.248.165.91:8000/api/addNewCondition';
-  locationLookupUrl: string = 'http://104.248.165.91:8000/api/locationLookup';
+  searchDrgUrl: string = 'https://www.pricedoctorapi.digital/api/searchDRG';
+  searchDrgLatestYearUrl: string = 'https://www.pricedoctorapi.digital/api/searchDRGLatestYear';
+  searchDRGLatestYearWithHospitalLocationsAndFiltering: string = 'https://www.pricedoctorapi.digital/api/searchDRGLatestYearWithHospitalLocationsAndFiltering';
+  addNewCondition: string = 'https://www.pricedoctorapi.digital/api/addNewCondition';
+  locationLookupUrl: string = 'https://www.pricedoctorapi.digital/api/locationLookup';
   //addNewCondition: string = 'http://localhost:8000/api/addNewCondition';
-  getbaseUrl: string = 'http://104.248.165.91:8000/';
+  getbaseUrl: string = 'https://www.pricedoctorapi.digital/';
 
   public responce: any;
 
@@ -46,7 +46,7 @@ export class HttpService{
         zip: data,
       }
     });
-
+    
     return this.http
       .post(this.locationLookupUrl, body, { headers }).toPromise().then(res => { this.responce = res, this.dataService.setUserLocationData(this.responce); } );
       // .subscribe(res => this.responce = res);
@@ -94,7 +94,9 @@ export class HttpService{
     });
 
     return this.http
-      .post(this.searchDRGLatestYearWithHospitalLocationsAndFiltering, body, { headers }).toPromise().then(res => { this.responce = res, this.dataService.setSearchData(this.responce); } );
+      .post(this.searchDRGLatestYearWithHospitalLocationsAndFiltering, body, { headers }).toPromise().then(res => { this.responce = res, this.dataService.setSearchData(this.responce); } ).catch(e => {
+        console.log(e);
+    });
       // .subscribe(res => this.responce = res);
   }
 
