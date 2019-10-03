@@ -8,7 +8,7 @@ import { Component } from '@angular/core';
 export class HelpButtonComponent {
   showHelp: boolean = false;
 
-  enableShow() {
-    this.showHelp = !this.showHelp;
+  enableShow(val: boolean) {
+    this.showHelp = val;
   }
 }
