@@ -1,4 +1,5 @@
-<img id="question" class="icon" (click)="enableShow()" src="../../assets/question.png">
+<span (mouseenter)="enableShow(true)" (mouseleave)="enableShow(false)">
+<img id="question" alt="Help button" class="icon" src="../../assets/question.png">
 <div class="help-dropdown" *ngIf="showHelp">
     <div class="speech-bubble">
         <!--
@@ -6,12 +7,13 @@
             DrG Code Definition
             MCC/CC
         -->
-        <h3>About</h3><p>This site provides an easy way to compare prices, ratings, and distances between many hospitals across america. Simply enter your DRG code to return results for supporting hospitals and their relative pricing and distances, based on your location.</p>
-        <h3>DRG Code</h3><p>Explain dRG Codes here <br><i>Unsure of your DRG code? Visit <a target="_blank" href="https://www.cms.gov/icd10m/version37-fullcode-cms/fullcode_cms/P0002.html">cms.gov</a></i></p>
+        <h3>About</h3><p>This application provides a quick and easy way to compare prices of various conditions and treatments between many hospitals across the US. Simply enter you DRG code or description and apply any of the filters you require to see the results for supporting hospitals and their relevent prices and distances from your location, or specified Zip code.</p>
+        <h3>DRG Code</h3><p>DRG stands for Diagnosis Related Groups. DRGs are used to classify hospital cases in to different groups. These are used to identify "products" that a hospital provides e.g a kidney transplant. These groupings are used for establishing how much medicare pays the hospital for each "product". <br><i>Unsure of your DRG code? <a target="_blank" href="https://www.cms.gov/icd10m/version37-fullcode-cms/fullcode_cms/P0002.html">Click Here</a> To find out what DRG your treatment or condition is priced under.</i></p>
         <h3>MCC/CC</h3><p>
-            <span style="margin-left: 10px;">MCC - Means this thing</span>
+            <span style="margin-left: 10px;">MCC - Stands for Major Complication or Comorbidity. Comorbidity is refered to when the DRG being referenced is used as a secondary diagnosis</span>
             <br>
-            <span style="margin-left: 10px;">CC - Means this thing</span>
+            <span style="margin-left: 10px;">CC - Stands for Comlication or Comborbidity. Comorbidity is refered to when the DRG being referenced is used as a secondary diagnosis</span>
         </p>
     </div>
 </div>
+</span>
