@@ -19,7 +19,7 @@ export class HttpService{
   constructor(private http: HttpClient, public dataService: DataService) { }
 
   sendPostRequest(data: string) {
-    console.log("sending req")
+    //console.log("sending req")
     const headers = new HttpHeaders()
       .set('cache-control', 'no-cache')
       .set('content-type', 'application/x-www-form-urlencoded');
@@ -36,7 +36,7 @@ export class HttpService{
   }
 
   sendPostUserLocation(data: string) {
-    console.log("sending req")
+    //console.log("sending req")
     const headers = new HttpHeaders()
       .set('cache-control', 'no-cache')
       .set('content-type', 'application/x-www-form-urlencoded');
@@ -63,7 +63,7 @@ export class HttpService{
   }
 
   sendPostGetAllData(data, distance, price, rating, zipCode, userLat, userLon) {
-    console.log("sending req")
+    //console.log("sending req")
     const headers = new HttpHeaders()
       .set('cache-control', 'no-cache')
       .set('content-type', 'application/x-www-form-urlencoded');
@@ -80,7 +80,7 @@ export class HttpService{
     if(zipCode === undefined){
       zipCode = null;
     }
-    console.log(distance);
+    //console.log(distance);
     const body = new HttpParams({
       fromObject: {
         drg: data,
@@ -95,7 +95,7 @@ export class HttpService{
 
     return this.http
       .post(this.searchDRGLatestYearWithHospitalLocationsAndFiltering, body, { headers }).toPromise().then(res => { this.responce = res, this.dataService.setSearchData(this.responce); } ).catch(e => {
-        console.log(e);
+        //console.log(e);
     });
       // .subscribe(res => this.responce = res);
   }

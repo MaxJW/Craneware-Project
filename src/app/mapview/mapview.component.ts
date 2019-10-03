@@ -38,7 +38,7 @@ export class MapviewComponent implements OnInit {
     this.searchDataSub = this.dataService.getSearchDataUpdateListener()
       .subscribe((searchData) => {
         this.searchData = searchData;
-        console.log(this.searchData);
+        //console.log(this.searchData);
         this.initMap();
       });
 
@@ -46,7 +46,7 @@ export class MapviewComponent implements OnInit {
     this.locationDataSub = this.dataService.getUserLocationDataListener()
         .subscribe((locationData) => {
           this.locationData = locationData;
-          console.log(this.locationData);
+          //console.log(this.locationData);
           this.initMap();
         });  
 
@@ -208,7 +208,7 @@ export class MapviewComponent implements OnInit {
   }
 
   createMarker(location, hospital) {
-    console.log();
+    //console.log();
     var marker = new google.maps.Marker({
       map: this.map,
       position: {lat: location.lat, lng: location.lon},
@@ -217,7 +217,7 @@ export class MapviewComponent implements OnInit {
     });
 
     this.counter++;
-    console.log(this.counter);
+    // console.log(this.counter);
 
     var self = this;
     google.maps.event.addListener(marker, 'click', function() {
@@ -235,7 +235,7 @@ export class MapviewComponent implements OnInit {
   }
 
   centerMapPlease(data) {
-    console.log('Centering!', data)
+    //console.log('Centering!', data)
   }
 
   handleLocationError(browserHasGeolocation, infoWindow, pos) {
@@ -282,7 +282,7 @@ export class MapviewComponent implements OnInit {
                 duration: results[j].duration.text
               };
               this.distances.push(travel);
-              console.log(providerId + ': ' + ori[k] + ' to ' + desti[j] + ': ' + results[j].distance.text + ' in ' + results[j].duration.text);
+              //console.log(providerId + ': ' + ori[k] + ' to ' + desti[j] + ': ' + results[j].distance.text + ' in ' + results[j].duration.text);
             }
             }
             //console.log(results[0].status);

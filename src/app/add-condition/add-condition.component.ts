@@ -816,7 +816,7 @@ export class AddConditionComponent implements OnInit {
   //Submits to database but returns error for some reason
   onSubmit(data) {
     // Process form data here
-    console.log('New condition submitted', data);
+    //console.log('New condition submitted', data);
     this.httpService.createCondition(data)
       .subscribe(
         d => Swal.fire(

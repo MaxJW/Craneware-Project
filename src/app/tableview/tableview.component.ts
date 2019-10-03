@@ -37,7 +37,7 @@ export class TableviewComponent implements OnInit {
   }
 
   testingFunc(data) {
-    console.log(data.providerName + " selected!");
+    //console.log(data.providerName + " selected!");
   }
 
   @Output() mapSelection = new EventEmitter<string>();
