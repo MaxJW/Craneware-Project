@@ -2,9 +2,11 @@
   width: 95%;
 }
 
-mat-expansion-panel {
+mat-card {
   margin: auto;
   width: 80%;
+  margin-top: 30px;
+  margin-bottom: 30px;
 }
 
 mat-form-field {

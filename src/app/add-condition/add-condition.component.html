@@ -1,9 +1,9 @@
-<mat-expansion-panel>
-  <mat-expansion-panel-header>
+<mat-card>
+  <mat-card-title>
     <mat-panel-title>
       <b>Add new condition</b>
     </mat-panel-title>
-  </mat-expansion-panel-header>
+  </mat-card-title>
   <form [formGroup]="addConditionForm" (ngSubmit)="onSubmit(addConditionForm.value)">
       <mat-form-field>
           <input type="text" id="one" class="search-input" placeholder="Find Current Conditions" aria-label="Number" matInput [formControl]="myControl" [matAutocomplete]="auto">
@@ -57,5 +57,5 @@
     </mat-form-field>
       <button [disabled]="!addConditionForm.valid" mat-button class="button" type="submit">Submit</button>
   </form>
-</mat-expansion-panel>
+</mat-card>
 
