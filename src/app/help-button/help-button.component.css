@@ -32,7 +32,7 @@ img:hover {
 	position: relative;
 	background: rgb(0, 0, 0, 0.8);
     border-radius: .4em;
-    width: 500px;
+    width: 950px;
     color: white;
     padding: 8px;
 }
@@ -41,7 +41,7 @@ img:hover {
 	content: '';
 	position: absolute;
 	top: 0;
-	left: 96.5%;
+	left: 98%;
 	width: 0;
 	height: 0;
 	border: 8px solid transparent;
@@ -51,9 +51,36 @@ img:hover {
 	margin-top: -8px;
 }
 
+@media only screen and (max-width: 990px) {
+    .speech-bubble {
+        width: 700px;
+    }
+
+    .speech-bubble:after {
+        left: 97%;
+    }
+}
+
+@media only screen and (max-width: 740px) {
+    .speech-bubble {
+        width: 500px;
+    }
+
+}
+
 @media only screen and (max-width: 550px) {
     .speech-bubble {
-        width: 250px;
+        width: 300px;
+    }
+
+    .speech-bubble:after {
+        left: 94%;
+    }
+}
+
+@media only screen and (max-width: 350px) {
+    .speech-bubble {
+        width: 280px;
     }
 
     .speech-bubble:after {
