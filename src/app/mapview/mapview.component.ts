@@ -3,6 +3,7 @@ import { } from 'googlemaps';
 import { Subscription } from 'rxjs';
 
 import { DataService } from '../data.service';
+import { HttpService } from '../http.service';
 
 @Component({
   selector: 'app-mapview',
@@ -24,7 +25,9 @@ export class MapviewComponent implements OnInit {
   //Database get
   searchData;
   private searchDataSub: Subscription;
-  constructor(public dataService: DataService) { }
+  locationData;
+  private locationDataSub: Subscription;
+  constructor(public dataService: DataService, public httpService: HttpService) { }
   distances = [];
   pos = { lat: 0, lng: 0 };
 
@@ -38,6 +41,14 @@ export class MapviewComponent implements OnInit {
         console.log(this.searchData);
         this.initMap();
       });
+
+    this.locationData = this.dataService.getUserLocationData();
+    this.locationDataSub = this.dataService.getUserLocationDataListener()
+        .subscribe((locationData) => {
+          this.locationData = locationData;
+          console.log(this.locationData);
+          this.initMap();
+        });  
 
     this.initMap();
   }
@@ -82,12 +93,12 @@ export class MapviewComponent implements OnInit {
     }
   }
 
-  createGeolocationMarker() {
+  async createGeolocationMarker() {
     var self = this;
     //Get user location
     if (this.geotoggleEnabled) {
       if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(function (position) {
+        navigator.geolocation.getCurrentPosition(function(position) {
           self.pos = {
             lat: position.coords.latitude,
             lng: position.coords.longitude
@@ -107,15 +118,15 @@ export class MapviewComponent implements OnInit {
             icon: image,
           });
 
-          google.maps.event.addListener(curr_location, 'click', function () {
+          google.maps.event.addListener(curr_location, 'click', function() {
             self.infowindow.setContent('Current Location');
             self.infowindow.open(self.map, this);
           });
 
           self.map.setCenter(new google.maps.LatLng(self.pos.lat, self.pos.lng));
-          self.map.setZoom(6);
+          self.map.setZoom(5);
           self.createRadius();
-        }, function () {
+        }, function() {
           self.handleLocationError(true, self.infowindow, self.map.getCenter());
         });
       } else {
@@ -123,6 +134,36 @@ export class MapviewComponent implements OnInit {
         this.handleLocationError(false, this.infowindow, this.map.getCenter());
       }
     } else {
+      var userzipcoords = await this.dataService.getUserLocationData();
+      //console.log(userzipcoords);
+      self.pos = {
+          lat: parseFloat(userzipcoords.lat),
+          lng: parseFloat(userzipcoords.lon),
+      };
+      //console.log(self.pos)
+      var image = {
+          url: '/assets/icon.png',
+          size: new google.maps.Size(30, 30),
+          origin: new google.maps.Point(0, 0),
+          anchor: new google.maps.Point(15, 15)
+        };
+
+      var curr_location = new google.maps.Marker({
+          map: self.map,
+          position: new google.maps.LatLng(self.pos.lat, self.pos.lng),
+          title: 'Current Location',
+          icon: image,
+        });
+
+      google.maps.event.addListener(curr_location, 'click', function() {
+          self.infowindow.setContent('Current Location');
+          self.infowindow.open(self.map, this);
+        });
+
+      self.map.setCenter(new google.maps.LatLng(self.pos.lat, self.pos.lng));
+      self.map.setZoom(5);
+      self.createRadius();
+      }
       //Get ZipCode Location coords
       /*self.pos = {
         lat: position.coords.latitude,
@@ -152,7 +193,6 @@ export class MapviewComponent implements OnInit {
       self.map.setZoom(6);
       self.createRadius();*/
     }
-  }
 
   createRadius() {
     var geoCircle = new google.maps.Circle({
@@ -180,7 +220,7 @@ export class MapviewComponent implements OnInit {
     console.log(this.counter);
 
     var self = this;
-    google.maps.event.addListener(marker, 'click', function () {
+    google.maps.event.addListener(marker, 'click', function() {
       self.infowindow.setContent(
         `<div class="infowindow_content">` +
         `<h3>` + hospital.providerName + `</h3><hr style="margin: 4px 0"/>` +
